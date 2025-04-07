@@ -11,8 +11,7 @@ interface AuthFormProps {
 }
 
 export const AuthForm: React.FC<AuthFormProps> = ({ authType }) => {
-  const [isRegister] = useState<boolean>(authType === 'register');
-
+  const isRegister = authType === 'register';
   return (
     <form className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-2 text-center">
