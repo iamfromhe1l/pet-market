@@ -32,11 +32,11 @@ export class UsersSchema extends TimeStamps {
     rtHash: string | null;
 
     @prop({ type: () => Types.ObjectId })
-    kennel: Types.ObjectId;
+    kennel?: Types.ObjectId;
 
-    @prop({ required: true, enum: UserRole })
+    @prop({ required: true, enum: UserRole, default: UserRole.USER })
     role: UserRole;
 
-    @prop({ required: true, type: () => OrderInfo, _id: false })
-    orderInfo: OrderInfo;
+    @prop({ type: () => OrderInfo, _id: false })
+    orderInfo?: OrderInfo[];
 }
