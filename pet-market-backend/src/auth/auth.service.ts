@@ -11,6 +11,8 @@ import { createHash } from "crypto";
 import { Types } from "mongoose";
 import { JwtTokens, SignType } from "../common/types/jwt.files";
 import { Errors } from "../common/constants/errors";
+import { SignupAuthDto } from "./dto/signup.auth.dto";
+import { SigninAuthDto } from "./dto/signin.auth.dto";
 
 @Injectable()
 export class AuthService {
@@ -20,7 +22,7 @@ export class AuthService {
         private readonly configService: ConfigService,
     ) {}
 
-    async signup({ password, ...dto }: any): Promise<SignType> {
+    async signup({ password, ...dto }: SignupAuthDto): Promise<SignType> {
         if (await this.userService.getUser(dto.email))
             throw new BadRequestException(Errors.ALREADY_REGISTERED);
         const hash = await this.simpleHash(password);
@@ -33,7 +35,7 @@ export class AuthService {
         return { jwt: await this.getTokens(dto.email, userId), user };
     }
 
-    async signin(dto: any): Promise<SignType> {
+    async signin(dto: SigninAuthDto): Promise<SignType> {
         const user = await this.userService.getUser(dto.email);
         if (!user) throw new BadRequestException(Errors.USER_NOT_FOUND);
         const isPasswordValid = await compare(dto.password, user.hash);

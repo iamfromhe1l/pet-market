@@ -16,7 +16,6 @@ export class UsersService {
     async createUser(email: string, dto: CreateUserDto): Promise<UsersSchema> {
         return await new this.usersSchema({
             email: email,
-            username: dto.username,
             hash: dto.hash,
             rtHash: dto.rtHash,
         }).save();
