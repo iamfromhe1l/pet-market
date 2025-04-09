@@ -38,4 +38,8 @@ export class UsersService {
         const user = await this.usersSchema.findOne({ email }).exec();
         return user ? user._id : null;
     }
+
+    async updateRtHash(id: Types.ObjectId, hash: string): Promise<void> {
+        await this.usersSchema.findByIdAndUpdate(id, { rtHash: hash });
+    }
 }
