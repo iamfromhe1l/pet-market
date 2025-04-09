@@ -22,14 +22,14 @@ export class UsersSchema extends TimeStamps {
     @prop({ unique: true, required: true, type: () => String })
     email: string;
 
-    @prop({ required: true, type: () => String })
-    username: string;
+    @prop({ type: () => String })
+    username?: string;
 
     @prop({ required: true, type: () => String })
     hash: string;
 
     @prop({ default: null, nullable: true })
-    rtHash: string | null;
+    rtHash?: string | null;
 
     @prop({ type: () => Types.ObjectId })
     kennel?: Types.ObjectId;

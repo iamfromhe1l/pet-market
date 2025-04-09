@@ -1,0 +1,35 @@
+meta {
+  name: Signup_docs
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/auth/signup
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "test@gmail.com",
+    "username": "1233",
+    "password": "12345678"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("at",res.body.jwt.access_token);
+  bru.setEnvVar("rt",res.body.jwt.refresh_token)
+}
+
+docs {
+      @IsEmail()
+      @IsNotEmpty()
+      email: string;
+  
+      @IsString()
+      @MinLength(8)
+      @MaxLength(14)
+      password: string;
+}

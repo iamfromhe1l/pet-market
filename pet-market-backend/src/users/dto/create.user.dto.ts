@@ -7,13 +7,5 @@ export class CreateUserDto {
 
     @IsString()
     @IsNotEmpty()
-    username: string;
-
-    @IsString()
-    @IsNotEmpty()
     hash: string;
-
-    @IsString()
-    @IsNotEmpty()
-    rtHash: string;
 }

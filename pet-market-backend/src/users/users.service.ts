@@ -16,7 +16,6 @@ export class UsersService {
     async createUser(email: string, dto: CreateUserDto): Promise<UsersSchema> {
         return await new this.usersSchema({
             email: email,
-            username: dto.username,
             hash: dto.hash,
             rtHash: dto.rtHash,
         }).save();
@@ -37,5 +36,9 @@ export class UsersService {
     async getUserId(email: string): Promise<Types.ObjectId> {
         const user = await this.usersSchema.findOne({ email }).exec();
         return user ? user._id : null;
+    }
+
+    async updateRtHash(id: Types.ObjectId, hash: string): Promise<void> {
+        await this.usersSchema.findByIdAndUpdate(id, { rtHash: hash });
     }
 }
