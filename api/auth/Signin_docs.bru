@@ -1,0 +1,34 @@
+meta {
+  name: Signin_docs
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/auth/signin
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "test@gmail.com",
+    "password": "12345678"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("at",res.body.jwt.access_token);
+  bru.setEnvVar("rt",res.body.jwt.refresh_token);
+}
+
+docs {
+      @IsEmail()
+      @IsNotEmpty()
+      email: string;
+  
+      @IsString()
+      @MinLength(8)
+      @MaxLength(14)
+      password: string;
+}

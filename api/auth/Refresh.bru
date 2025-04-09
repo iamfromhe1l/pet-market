@@ -1,0 +1,27 @@
+meta {
+  name: Refresh
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{host}}/auth/refresh
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{rt}}
+}
+
+body:json {
+  {
+    "email": "test@gmail.com",
+    "password": "12345678"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("at",res.body.access_token);
+  bru.setEnvVar("rt",res.body.refresh_token);
+}
