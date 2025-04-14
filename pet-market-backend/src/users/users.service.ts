@@ -17,7 +17,6 @@ export class UsersService {
         return await new this.usersSchema({
             email: email,
             hash: dto.hash,
-            rtHash: dto.rtHash,
         }).save();
     }
 

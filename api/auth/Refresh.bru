@@ -14,14 +14,7 @@ auth:bearer {
   token: {{rt}}
 }
 
-body:json {
-  {
-    "email": "test@gmail.com",
-    "password": "12345678"
-  }
-}
-
 script:post-response {
-  bru.setEnvVar("at",res.body.access_token);
-  bru.setEnvVar("rt",res.body.refresh_token);
+  bru.setEnvVar("at",res.body.jwt.access_token);
+  bru.setEnvVar("rt",res.body.jwt.refresh_token);
 }
