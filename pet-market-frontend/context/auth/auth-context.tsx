@@ -12,7 +12,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { useUser } from './user-context';
+import { useUser } from '../user/user-context';
 
 interface AuthState {
   token: string | null;
@@ -48,6 +48,12 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+      setAuthState({
+        token,
+        refreshToken,
+        authenticated: true,
+      });
     }
   }, []);
 
