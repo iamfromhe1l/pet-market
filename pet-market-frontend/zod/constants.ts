@@ -7,7 +7,8 @@ export const ZOD_BASE_ERROR_MESSAGES = {
     requiredString: RequiredString,
     lengthString: LengthString,
     length: number,
-  ) => `${fieldName} ${requiredString} быть не ${lengthString} ${length} символов`,
+  ) =>
+    `${fieldName} ${requiredString} быть не ${lengthString} ${length} символов`,
 } as const;
 
 export const ZOD_AUTH_ERROR_MESSAGES = {
