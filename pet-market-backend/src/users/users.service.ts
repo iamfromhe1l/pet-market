@@ -63,4 +63,12 @@ export class UsersService {
     async removeAdmin(id: Types.ObjectId): Promise<void> {
         await this.setUserRole(id, UserRole.USER);
     }
+
+    async setKennelId(kennelId: Types.ObjectId, userId: Types.ObjectId) {
+        await this.usersSchema.findByIdAndUpdate(userId, { kennel: kennelId });
+    }
+
+    async unsetKennelId(userId: Types.ObjectId) {
+        await this.usersSchema.findByIdAndUpdate(userId, { kennel: null });
+    }
 }

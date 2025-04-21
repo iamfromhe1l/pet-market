@@ -1,0 +1,24 @@
+meta {
+  name: leave_Kennel
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:3000/api/kennels
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}
+
+body:json {
+  {
+    "name": "KennelForCats",
+    "address": "123 Albus Street",
+    "description": "Created via Bruno"
+  }
+  
+}
