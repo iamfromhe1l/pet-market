@@ -13,7 +13,7 @@ import { GetCurrentRt } from "../common/decorators/get_current_rt.decorator";
 import { AuthService } from "./auth.service";
 import { GetCurrentId } from "../common/decorators/get_current_id.decorator";
 import { Types } from "mongoose";
-import { SignType } from "../common/types/jwt.files";
+import { SignType } from "../common/types/jwt.type";
 import { SignupAuthDto } from "./dto/signup.auth.dto";
 import { SigninAuthDto } from "./dto/signin.auth.dto";
 

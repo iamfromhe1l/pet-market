@@ -9,7 +9,7 @@ import { ConfigService } from "@nestjs/config";
 import { compare, genSalt, hash } from "bcryptjs";
 import { createHash } from "crypto";
 import { Types } from "mongoose";
-import { JwtTokens, SignType } from "../common/types/jwt.files";
+import { JwtTokens, SignType } from "../common/types/jwt.type";
 import { Errors } from "../common/constants/errors";
 import { SignupAuthDto } from "./dto/signup.auth.dto";
 import { SigninAuthDto } from "./dto/signin.auth.dto";
@@ -26,7 +26,7 @@ export class AuthService {
         if (await this.userService.getUser(dto.email))
             throw new BadRequestException(Errors.ALREADY_REGISTERED);
         const hash = await this.simpleHash(password);
-        const user = await this.userService.createUser(dto.email, {
+        const user = await this.userService.createUser({
             ...dto,
             hash,
         });

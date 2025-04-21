@@ -8,4 +8,8 @@ export class CreateUserDto {
     @IsString()
     @IsNotEmpty()
     hash: string;
+
+    @IsString()
+    @IsNotEmpty()
+    username: string;
 }

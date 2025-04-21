@@ -1,11 +1,13 @@
 import { Controller, Get } from "@nestjs/common";
-import { GetCurrentId } from "../common/decorators/get_current_id.decorator";
-import { Types } from "mongoose";
+import { GetCurrentEmail } from "../common/decorators/get_current_email.decorator";
+import { UsersService } from "./users.service";
 
 @Controller("users")
 export class UsersController {
+    constructor(private readonly usersService: UsersService) {}
+
     @Get()
-    async logout(@GetCurrentId() id: Types.ObjectId) {
-        console.log("afaf");
+    async getUser(@GetCurrentEmail() email: string) {
+        return this.usersService.getUser(email);
     }
 }

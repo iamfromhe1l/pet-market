@@ -13,17 +13,28 @@ export class UsersService {
         private readonly usersSchema: ReturnModelType<typeof UsersSchema>,
     ) {}
 
-    async createUser(email: string, dto: CreateUserDto): Promise<UsersSchema> {
+    async createUser(dto: CreateUserDto): Promise<UsersSchema> {
         return await new this.usersSchema({
-            email: email,
+            email: dto.email,
             hash: dto.hash,
+            username: dto.username,
         }).save();
     }
 
-    async getUser(email: string): Promise<UsersSchema> {
+    async getUserWithHash(email: string): Promise<UsersSchema> {
         const user = this.usersSchema.findOne({ email });
         if (!user) throw new NotFoundException(Errors.USER_NOT_FOUND);
         return user;
+    }
+
+    async getUser(email: string) {
+        const user = await this.getUserWithHash(email);
+        return {
+            email: user.email,
+            username: user.username,
+            _id: user._id,
+            role: user.role,
+        };
     }
 
     async getUserById(id: Types.ObjectId): Promise<UsersSchema> {
