@@ -37,6 +37,12 @@ export const UserProvider: React.FC<PropsWithChildren> = ({ children }) => {
     });
   };
 
+  const clearUser = () => {
+    setUserState({
+      user: undefined,
+    });
+  };
+
   const getUser = async (): Promise<BaseResponse<UserModel>> => {
     try {
       const data = await UserApi.getUser();
@@ -49,14 +55,9 @@ export const UserProvider: React.FC<PropsWithChildren> = ({ children }) => {
         data,
       };
     } catch (e: unknown) {
+      clearUser();
       return getAxiosError<UserModel>(e);
     }
-  };
-
-  const clearUser = () => {
-    setUserState({
-      user: undefined,
-    });
   };
 
   const value: UserProps = {

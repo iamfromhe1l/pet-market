@@ -13,6 +13,7 @@ import React, {
   useState,
 } from 'react';
 import { useUser } from '../user/user-context';
+import { UserModel } from '@/api/models/user-model';
 
 interface AuthState {
   token: string | null;
@@ -22,6 +23,7 @@ interface AuthState {
 
 interface AuthProps {
   authState?: AuthState;
+  loading?: boolean;
   onRegister?: (params: RegisterParams) => Promise<BaseResponse<AuthResponse>>;
   onLogin?: (params: LoginParams) => Promise<BaseResponse<AuthResponse>>;
   onLogout?: () => Promise<BaseResponse>;
@@ -41,6 +43,20 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     refreshToken: null,
     authenticated: false,
   });
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const clearTokens = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+
+    axios.defaults.headers.common['Authorization'] = '';
+
+    setAuthState({
+      token: null,
+      refreshToken: null,
+      authenticated: false,
+    });
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -55,7 +71,17 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         authenticated: true,
       });
 
-      onGetUser!();
+      onGetUser!().then((data: BaseResponse<UserModel>) => {
+        console.log(data);
+        if (data.error) {
+          // refresh token
+          clearTokens();
+        }
+        setLoading(false);
+      });
+    } else {
+      onClearUser!();
+      setLoading(false);
     }
   }, []);
 
@@ -121,17 +147,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     try {
       await AuthApi.logout();
 
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
-
-      axios.defaults.headers.common['Authorization'] = '';
-
-      setAuthState({
-        token: null,
-        refreshToken: null,
-        authenticated: false,
-      });
-
+      clearTokens();
       onClearUser!();
 
       return {
@@ -144,6 +160,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const value: AuthProps = {
     authState,
+    loading,
     onRegister: register,
     onLogin: login,
     onLogout: logout,
