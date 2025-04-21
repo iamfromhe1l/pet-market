@@ -34,6 +34,7 @@ export class UsersService {
             username: user.username,
             _id: user._id,
             role: user.role,
+            kennel: user!.kennel,
         };
     }
 
@@ -53,7 +54,11 @@ export class UsersService {
     }
 
     async setUserRole(id: Types.ObjectId, role: UserRole): Promise<void> {
-        this.usersSchema.findByIdAndUpdate(id, { $set: { role } });
+        await this.usersSchema.findByIdAndUpdate(
+            id,
+            { $set: { role } },
+            { new: true },
+        );
     }
 
     async addAdmin(id: Types.ObjectId): Promise<void> {
@@ -70,5 +75,12 @@ export class UsersService {
 
     async unsetKennelId(userId: Types.ObjectId) {
         await this.usersSchema.findByIdAndUpdate(userId, { kennel: null });
+    }
+
+    async deleteKennelFromUsers(kennelId: Types.ObjectId) {
+        await this.usersSchema.updateMany(
+            { kennel: kennelId },
+            { role: UserRole.USER, kennel: null },
+        );
     }
 }
