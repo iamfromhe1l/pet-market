@@ -4,21 +4,12 @@ meta {
   seq: 5
 }
 
-post {
-  url: http://localhost:3000/api/kennels
+patch {
+  url: {{host}}/kennels/68067e4d58d37d27d350b21e
   body: json
   auth: bearer
 }
 
 auth:bearer {
   token: {{at}}
-}
-
-body:json {
-  {
-    "name": "KennelForCats",
-    "address": "123 Albus Street",
-    "description": "Created via Bruno"
-  }
-  
 }

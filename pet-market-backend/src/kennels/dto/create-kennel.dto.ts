@@ -1,4 +1,4 @@
-import { IsString, MaxLength, IsNotEmpty } from "class-validator";
+import { IsString, MaxLength, IsNotEmpty, MinLength } from "class-validator";
 
 export enum KennelStatus {
     pending = "pending",
@@ -19,15 +19,20 @@ export enum KennelStatus {
 
 export class CreateKennelDto {
     @IsString()
+    @MinLength(4)
     @MaxLength(40)
     @IsNotEmpty()
     name: string;
 
     @IsString()
     @IsNotEmpty()
+    @MinLength(10)
+    @MaxLength(255)
     address: string;
 
     @IsString()
     @IsNotEmpty()
+    @MinLength(10)
+    @MaxLength(255)
     description: string;
 }

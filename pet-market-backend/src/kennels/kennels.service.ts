@@ -6,6 +6,8 @@ import { CreateKennelDto } from "./dto/create-kennel.dto";
 import { Types } from "mongoose";
 import { KennelStatusEnum } from "src/common/types/kennel-status";
 import { UsersService } from "../users/users.service";
+import { UserRole } from "src/common/types/roles.enum";
+import { promises } from "dns";
 
 @Injectable()
 export class KennelsService {
@@ -27,8 +29,10 @@ export class KennelsService {
             description: dto.description,
             status: KennelStatusEnum.PENDING,
         });
-        this.usersService.setKennelId(newKennel.id, userId);
-        return await newKennel.save();
+        await this.usersService.setKennelId(newKennel.id, userId);
+        await this.usersService.setUserRole(userId, UserRole.SELLER);
+        console.log(user);
+        return newKennel.save();
     }
 
     async getAllKennels() {
@@ -36,7 +40,7 @@ export class KennelsService {
     }
 
     async approveKennel(id: Types.ObjectId) {
-        return await this.kennelsSchema.findByIdAndUpdate(
+        return this.kennelsSchema.findByIdAndUpdate(
             id,
             { status: KennelStatusEnum.APPROVED },
             { new: true },
@@ -44,13 +48,23 @@ export class KennelsService {
     }
 
     async getAppliedKennels() {
-        return await this.kennelsSchema.find({
+        return this.kennelsSchema.find({
             status: KennelStatusEnum.APPROVED,
         });
     }
 
     async leaveKennel(userId: Types.ObjectId) {
         this.usersService.unsetKennelId(userId);
+        this.usersService.setUserRole(userId, UserRole.USER);
+    }
+
+    async deleteKennel(kennelId: Types.ObjectId) {
+        await this.usersService.deleteKennelFromUsers(kennelId);
+        await this.kennelsSchema.findByIdAndDelete(kennelId);
+    }
+
+    async getKennelById(kennelId: Types.ObjectId): Promise<KennelsSchema> {
+        return this.kennelsSchema.findById(kennelId);
     }
     //отклонение запросов на подтверждение питомника.
 }

@@ -7,12 +7,17 @@ import {
     Param,
     UseGuards,
     Patch,
+    Delete,
 } from "@nestjs/common";
 import { KennelsService } from "./kennels.service";
 import { CreateKennelDto } from "./dto/create-kennel.dto";
 import { Types } from "mongoose";
 import { AtGuard } from "../auth/guards/at.guard";
 import { GetCurrentId } from "../common/decorators/get_current_id.decorator";
+import { Roles } from "src/common/decorators/role.decorator";
+import { UserRole } from "src/common/types/roles.enum";
+import { ParseObjectIdPipe } from "src/common/pipes/parse_object_id.pipe";
+import { KennelsSchema } from "./kennels.schema";
 
 @Controller("kennels")
 export class KennelsController {
@@ -23,7 +28,7 @@ export class KennelsController {
     //     return this.kennelsService.createKennel(dto);
     // }
 
-    @Post()
+    @Post() //создание
     async createKennel(
         @Body() dto: CreateKennelDto,
         @GetCurrentId() userId: Types.ObjectId,
@@ -31,14 +36,38 @@ export class KennelsController {
         return this.kennelsService.createKennel(dto, userId);
     }
 
-    @Patch()
-    async leaveKennel(@GetCurrentId() userId: Types.ObjectId) {
+    // @Patch("invite/:kennelId") //обновить часть
+    // @Roles(UserRole.SELLER)
+    // async inviteUser(
+    //     @GetCurrentId() userId: Types.ObjectId,
+    //     @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,
+    // ) {
+    //     return this.kennelsService.leaveKennel(userId);
+    // }
+
+    @Patch("/:kennelId") //обновить часть
+    @Roles(UserRole.SELLER)
+    async leaveKennel(
+        @GetCurrentId() userId: Types.ObjectId,
+        @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,
+    ) {
         return this.kennelsService.leaveKennel(userId);
     }
 
-    @Put("approve/:kennelId")
-    async approveKennel(@Param("kennelId") kennelId: Types.ObjectId) {
+    @Put("approve/:kennelId") //полностью обновить
+    @Roles(UserRole.ADMIN)
+    async approveKennel(
+        @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,
+    ) {
         return this.kennelsService.approveKennel(kennelId);
+    }
+
+    @Delete("/:kennelId")
+    @Roles(UserRole.ADMIN, UserRole.SELLER)
+    async deleteKennel(
+        @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,
+    ) {
+        this.kennelsService.deleteKennel(kennelId);
     }
 
     @Get()
@@ -49,5 +78,12 @@ export class KennelsController {
     @Get("/applied")
     async getAppliedKennels() {
         return this.kennelsService.getAppliedKennels();
+    }
+
+    @Get(":kennelId")
+    async getKennelById(
+        @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,
+    ): Promise<KennelsSchema> {
+        return this.kennelsService.getKennelById(kennelId);
     }
 }

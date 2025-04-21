@@ -1,0 +1,15 @@
+meta {
+  name: delete_Kennel
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{host}}/kennels/680697b34119a8a515ee6802
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}
