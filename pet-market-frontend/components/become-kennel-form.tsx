@@ -3,7 +3,6 @@
 import { ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { useState } from 'react';
 import { BecomeKennelSchema } from '@/zod/become-kennel-schema';
@@ -18,8 +17,15 @@ import {
   FormLabel,
   FormMessage,
 } from './ui/form';
+import { CreateKennelParams } from '@/api/kennel/types';
+import { useKennel } from '@/context/kennel/kennel-context';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export const BecomeKennelForm = () => {
+  const { onCreateKennel } = useKennel();
+  const router = useRouter();
+
   const [loading, setLoading] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof BecomeKennelSchema>>({
@@ -27,12 +33,38 @@ export const BecomeKennelForm = () => {
     defaultValues: {
       name: '',
       description: '',
+      address: '',
     },
   });
 
+  const createKennel = async (
+    params: CreateKennelParams,
+    toastId: string | number,
+  ) => {
+    const res = await onCreateKennel!(params);
+
+    if (res && res.error) {
+      toast.error(res.error, {
+        id: toastId,
+      });
+      form.control.setError('name', {});
+      form.control.setError('description', {});
+      form.control.setError('address', { message: res.error });
+    } else {
+      toast.success('Заявка на подтверждение питомника отправлена!', {
+        id: toastId,
+      });
+      router.replace(`/kennel/${res.data?._id}`);
+    }
+  };
+
   const onSubmit = async (data: z.infer<typeof BecomeKennelSchema>) => {
+    const id = toast.loading('Подождите...', {
+      dismissible: false,
+      duration: 6000,
+    });
     setLoading(true);
-    console.log(data);
+    await createKennel(data, id);
     setLoading(false);
   };
 

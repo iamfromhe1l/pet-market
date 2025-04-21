@@ -23,6 +23,7 @@ interface AuthState {
 
 interface AuthProps {
   authState?: AuthState;
+  loading?: boolean;
   onRegister?: (params: RegisterParams) => Promise<BaseResponse<AuthResponse>>;
   onLogin?: (params: LoginParams) => Promise<BaseResponse<AuthResponse>>;
   onLogout?: () => Promise<BaseResponse>;
@@ -42,6 +43,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     refreshToken: null,
     authenticated: false,
   });
+  const [loading, setLoading] = useState<boolean>(true);
 
   const clearTokens = () => {
     localStorage.removeItem('token');
@@ -75,9 +77,11 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
           // refresh token
           clearTokens();
         }
+        setLoading(false);
       });
     } else {
       onClearUser!();
+      setLoading(false);
     }
   }, []);
 
@@ -156,6 +160,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const value: AuthProps = {
     authState,
+    loading,
     onRegister: register,
     onLogin: login,
     onLogout: logout,
