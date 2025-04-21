@@ -13,6 +13,7 @@ import React, {
   useState,
 } from 'react';
 import { useUser } from '../user/user-context';
+import { UserModel } from '@/api/models/user-model';
 
 interface AuthState {
   token: string | null;
@@ -42,6 +43,19 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     authenticated: false,
   });
 
+  const clearTokens = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+
+    axios.defaults.headers.common['Authorization'] = '';
+
+    setAuthState({
+      token: null,
+      refreshToken: null,
+      authenticated: false,
+    });
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refreshToken');
@@ -55,7 +69,15 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         authenticated: true,
       });
 
-      onGetUser!();
+      onGetUser!().then((data: BaseResponse<UserModel>) => {
+        console.log(data);
+        if (data.error) {
+          // refresh token
+          clearTokens();
+        }
+      });
+    } else {
+      onClearUser!();
     }
   }, []);
 
@@ -121,17 +143,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     try {
       await AuthApi.logout();
 
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
-
-      axios.defaults.headers.common['Authorization'] = '';
-
-      setAuthState({
-        token: null,
-        refreshToken: null,
-        authenticated: false,
-      });
-
+      clearTokens();
       onClearUser!();
 
       return {
