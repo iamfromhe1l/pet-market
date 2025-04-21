@@ -5,6 +5,7 @@ import { ReturnModelType } from "@typegoose/typegoose";
 import { CreateUserDto } from "./dto/create.user.dto";
 import { Types } from "mongoose";
 import { Errors } from "../common/constants/errors";
+import { UserRole } from "../common/types/roles.enum";
 
 @Injectable()
 export class UsersService {
@@ -13,18 +14,27 @@ export class UsersService {
         private readonly usersSchema: ReturnModelType<typeof UsersSchema>,
     ) {}
 
-    async createUser(email: string, dto: CreateUserDto): Promise<UsersSchema> {
+    async createUser(dto: CreateUserDto): Promise<UsersSchema> {
         return await new this.usersSchema({
-            email: email,
+            email: dto.email,
             hash: dto.hash,
-            rtHash: dto.rtHash,
+            username: dto.username,
         }).save();
     }
 
-    async getUser(email: string): Promise<UsersSchema> {
-        const user = this.usersSchema.findOne({ email });
+    async getUserWithHash(email: string): Promise<UsersSchema> {
+        return this.usersSchema.findOne({ email }).exec();
+    }
+
+    async getUser(email: string) {
+        const user = await this.getUserWithHash(email);
         if (!user) throw new NotFoundException(Errors.USER_NOT_FOUND);
-        return user;
+        return {
+            email: user.email,
+            username: user.username,
+            _id: user._id,
+            role: user.role,
+        };
     }
 
     async getUserById(id: Types.ObjectId): Promise<UsersSchema> {
@@ -40,5 +50,17 @@ export class UsersService {
 
     async updateRtHash(id: Types.ObjectId, hash: string): Promise<void> {
         await this.usersSchema.findByIdAndUpdate(id, { rtHash: hash });
+    }
+
+    async setUserRole(id: Types.ObjectId, role: UserRole): Promise<void> {
+        this.usersSchema.findByIdAndUpdate(id, { $set: { role } });
+    }
+
+    async addAdmin(id: Types.ObjectId): Promise<void> {
+        await this.setUserRole(id, UserRole.ADMIN);
+    }
+
+    async removeAdmin(id: Types.ObjectId): Promise<void> {
+        await this.setUserRole(id, UserRole.USER);
     }
 }

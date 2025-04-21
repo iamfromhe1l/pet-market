@@ -15,4 +15,8 @@ export class SignupAuthDto {
     @MinLength(8)
     @MaxLength(14)
     password: string;
+
+    @IsString()
+    @IsNotEmpty()
+    username: string;
 }

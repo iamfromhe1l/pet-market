@@ -1,11 +1,11 @@
 meta {
-  name: Logout
+  name: get_user
   type: http
-  seq: 4
+  seq: 1
 }
 
-post {
-  url: {{host}}/auth/logout
+get {
+  url: {{host}}/users
   body: none
   auth: bearer
 }
