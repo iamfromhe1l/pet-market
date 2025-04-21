@@ -8,6 +8,7 @@ import { KennelStatusEnum } from "src/common/types/kennel-status";
 import { UsersService } from "../users/users.service";
 import { UserRole } from "src/common/types/roles.enum";
 import { promises } from "dns";
+import { Errors } from "src/common/constants/errors";
 
 @Injectable()
 export class KennelsService {
@@ -16,12 +17,11 @@ export class KennelsService {
         private readonly kennelsSchema: ReturnModelType<typeof KennelsSchema>,
         private readonly usersService: UsersService,
     ) {}
-
     async createKennel(dto: CreateKennelDto, userId: Types.ObjectId) {
         const user = await this.usersService.getUserById(userId);
         console.log(user);
         if (user.kennel) {
-            throw new BadRequestException("У вас уже есть заявленный кеннел");
+            throw new BadRequestException(Errors.YOU_ALREADY_IN_KENNEL);
         }
         const newKennel = new this.kennelsSchema({
             name: dto.name,
@@ -47,9 +47,15 @@ export class KennelsService {
         );
     }
 
-    async getAppliedKennels() {
+    async getApprovedKennels() {
         return this.kennelsSchema.find({
             status: KennelStatusEnum.APPROVED,
+        });
+    }
+
+    async getUnapprovedKennels() {
+        return this.kennelsSchema.find({
+            status: KennelStatusEnum.PENDING,
         });
     }
 
@@ -65,6 +71,16 @@ export class KennelsService {
 
     async getKennelById(kennelId: Types.ObjectId): Promise<KennelsSchema> {
         return this.kennelsSchema.findById(kennelId);
+    }
+
+    async inviteUser(userId: Types.ObjectId, kennelId: Types.ObjectId) {
+        const user = await this.usersService.getUserById(userId);
+        if (user.role == UserRole.ADMIN)
+            throw new BadRequestException(Errors.USER_IS_ADMIN);
+        if (user.kennel)
+            throw new BadRequestException(Errors.USER_ALREADY_IN_KENNEL);
+        await this.usersService.setKennelId(kennelId, userId);
+        await this.usersService.setUserRole(userId, UserRole.SELLER);
     }
     //отклонение запросов на подтверждение питомника.
 }

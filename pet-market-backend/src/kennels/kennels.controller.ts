@@ -36,14 +36,14 @@ export class KennelsController {
         return this.kennelsService.createKennel(dto, userId);
     }
 
-    // @Patch("invite/:kennelId") //обновить часть
-    // @Roles(UserRole.SELLER)
-    // async inviteUser(
-    //     @GetCurrentId() userId: Types.ObjectId,
-    //     @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,
-    // ) {
-    //     return this.kennelsService.leaveKennel(userId);
-    // }
+    @Patch("invite/:kennelId/:userId") //обновить часть
+    @Roles(UserRole.SELLER)
+    async inviteUser(
+        @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,
+        @Param("userId", ParseObjectIdPipe) userId: Types.ObjectId,
+    ) {
+        return this.kennelsService.inviteUser(userId, kennelId);
+    }
 
     @Patch("/:kennelId") //обновить часть
     @Roles(UserRole.SELLER)
@@ -75,9 +75,14 @@ export class KennelsController {
         return this.kennelsService.getAllKennels();
     }
 
-    @Get("/applied")
-    async getAppliedKennels() {
-        return this.kennelsService.getAppliedKennels();
+    @Get("/approved")
+    async getApprovedKennels() {
+        return this.kennelsService.getApprovedKennels();
+    }
+
+    @Get("/unapproved")
+    async getUnapprovedKennels() {
+        return this.kennelsService.getUnapprovedKennels();
     }
 
     @Get(":kennelId")

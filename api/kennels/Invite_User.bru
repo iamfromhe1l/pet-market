@@ -1,0 +1,15 @@
+meta {
+  name: Invite_User
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{host}}/kennels/invite/6806a953c2f3b32ebbfb44e3/6806a94bc2f3b32ebbfb44d9
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}
