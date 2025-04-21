@@ -1,8 +1,8 @@
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { prop } from "@typegoose/typegoose";
 import { Types } from "mongoose";
-import { UserRole } from "../common/types/roles";
-import { PaymentEnum } from "../common/types/payment";
+import { UserRole } from "../common/types/roles.enum";
+import { PaymentEnum } from "../common/types/payment.enum";
 
 class OrderInfo {
     @prop({ required: true, type: () => String })
@@ -19,6 +19,8 @@ class OrderInfo {
 }
 
 export class UsersSchema extends TimeStamps {
+    readonly _id!: Types.ObjectId;
+
     @prop({ unique: true, required: true, type: () => String })
     email: string;
 

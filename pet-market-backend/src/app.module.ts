@@ -9,6 +9,7 @@ import { AuthModule } from "./auth/auth.module";
 import { AtGuard } from "./auth/guards/at.guard";
 import { APP_GUARD } from "@nestjs/core";
 import { KennelsModule } from "./kennels/kennels.module";
+import { RBACGuard } from "./auth/guards/rbac.guard";
 
 @Module({
     imports: [
@@ -28,6 +29,10 @@ import { KennelsModule } from "./kennels/kennels.module";
         {
             provide: APP_GUARD,
             useClass: AtGuard,
+        },
+        {
+            provide: APP_GUARD,
+            useClass: RBACGuard,
         },
     ],
 })
