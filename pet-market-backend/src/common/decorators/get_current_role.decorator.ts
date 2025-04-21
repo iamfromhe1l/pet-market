@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 
-export const GetCurrentRt = createParamDecorator(
+export const GetCurrentRole = createParamDecorator(
     (_, context: ExecutionContext) =>
         context.switchToHttp().getRequest().user["role"],
 );

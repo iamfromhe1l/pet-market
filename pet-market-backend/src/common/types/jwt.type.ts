@@ -1,4 +1,5 @@
-import { UsersSchema } from "../../users/users.schema";
+import { Types } from "mongoose";
+import { UserRole } from "./roles.enum";
 
 export type JwtTokens = {
     access_token: string;
@@ -7,5 +8,10 @@ export type JwtTokens = {
 
 export type SignType = {
     jwt: JwtTokens;
-    user: UsersSchema;
+    user: {
+        email: string;
+        username: string;
+        _id: Types.ObjectId;
+        role: UserRole;
+    };
 };

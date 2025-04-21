@@ -26,6 +26,7 @@ export class RBACGuard implements CanActivate {
         if (!user) {
             throw new UnauthorizedException(Errors.NOT_AUTHENTICATED);
         }
+        console.log("User role:", user.role, user.rt, user);
 
         if (user.role === UserRole.SELLER) {
             const kennelId = request.params.kennelId;
