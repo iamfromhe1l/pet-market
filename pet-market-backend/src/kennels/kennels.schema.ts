@@ -18,4 +18,7 @@ export class KennelsSchema extends TimeStamps {
         default: KennelStatusEnum.PENDING,
     })
     status: KennelStatusEnum;
+
+    @prop({ type: () => String })
+    adminMessage?: string;
 }

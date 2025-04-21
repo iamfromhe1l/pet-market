@@ -1,0 +1,22 @@
+meta {
+  name: disable_Kennels
+  type: http
+  seq: 11
+}
+
+patch {
+  url: {{host}}/kennels/disable/6806aafc4e6f6bdc66270dfd
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}
+
+body:json {
+  {
+    "adminMessage": "Idi otsuda",
+    "status": "disabled"
+  }
+}

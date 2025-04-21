@@ -9,6 +9,7 @@ import { UsersService } from "../users/users.service";
 import { UserRole } from "src/common/types/roles.enum";
 import { promises } from "dns";
 import { Errors } from "src/common/constants/errors";
+import { ReviewKennelDto } from "./dto/review-kennel.dto";
 
 @Injectable()
 export class KennelsService {
@@ -43,6 +44,28 @@ export class KennelsService {
         return this.kennelsSchema.findByIdAndUpdate(
             id,
             { status: KennelStatusEnum.APPROVED },
+            { new: true },
+        );
+    }
+
+    async rejectKennel(id: Types.ObjectId, dto: ReviewKennelDto) {
+        return await this.kennelsSchema.findByIdAndUpdate(
+            id,
+            {
+                status: KennelStatusEnum.REJECTED,
+                adminMessage: dto.adminMessage,
+            },
+            { new: true },
+        );
+    }
+
+    async disableKennel(id: Types.ObjectId, dto: ReviewKennelDto) {
+        return this.kennelsSchema.findByIdAndUpdate(
+            id,
+            {
+                status: KennelStatusEnum.DISABLED,
+                adminMessage: dto.adminMessage,
+            },
             { new: true },
         );
     }
@@ -83,4 +106,5 @@ export class KennelsService {
         await this.usersService.setUserRole(userId, UserRole.SELLER);
     }
     //отклонение запросов на подтверждение питомника.
+    //если reject питомник, то нужна функция ChangeApplication(в которой меняется информация о питомнике и статус ставится на Pending), в начале функции проверяем, что только rejected, для disabled не будет работать.
 }
