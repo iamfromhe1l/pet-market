@@ -18,8 +18,10 @@ body:json {
 }
 
 script:post-response {
-  bru.setEnvVar("at",res.body.jwt.access_token);
-  bru.setEnvVar("rt",res.body.jwt.refresh_token);
+  if (res.body && res.body.jwt && res.body.jwt.access_token && res.body.jwt.refresh_token) {
+    bru.setEnvVar("at", res.body.jwt.access_token);
+    bru.setEnvVar("rt", res.body.jwt.refresh_token);
+  }
 }
 
 docs {

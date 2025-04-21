@@ -13,6 +13,7 @@ import { JwtTokens, SignType } from "../common/types/jwt.type";
 import { Errors } from "../common/constants/errors";
 import { SignupAuthDto } from "./dto/signup.auth.dto";
 import { SigninAuthDto } from "./dto/signin.auth.dto";
+import { UserRole } from "../common/types/roles.enum";
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
     ) {}
 
     async signup({ password, ...dto }: SignupAuthDto): Promise<SignType> {
-        if (await this.userService.getUser(dto.email))
+        if (await this.userService.getUserWithHash(dto.email))
             throw new BadRequestException(Errors.ALREADY_REGISTERED);
         const hash = await this.simpleHash(password);
         const user = await this.userService.createUser({
@@ -32,19 +33,35 @@ export class AuthService {
         });
         const userId = await this.userService.getUserId(dto.email);
         // TODO return id at once in createUser()
-        return { jwt: await this.getTokens(dto.email, userId), user };
+
+        return {
+            jwt: await this.getTokens(dto.email, userId, UserRole.USER),
+            user: {
+                email: user.email,
+                username: user.username,
+                _id: user._id,
+                role: user.role,
+            },
+        };
     }
 
     async signin(dto: SigninAuthDto): Promise<SignType> {
-        const user = await this.userService.getUser(dto.email);
+        const user = await this.userService.getUserWithHash(dto.email);
         if (!user) throw new BadRequestException(Errors.USER_NOT_FOUND);
         const isPasswordValid = await compare(dto.password, user.hash);
         if (!isPasswordValid)
             throw new BadRequestException(Errors.USER_NOT_FOUND);
         const userId = await this.userService.getUserId(dto.email);
-        return { jwt: await this.getTokens(dto.email, userId), user };
+        return {
+            jwt: await this.getTokens(dto.email, userId, UserRole.USER),
+            user: {
+                email: user.email,
+                username: user.username,
+                _id: user._id,
+                role: user.role,
+            },
+        };
     }
-
     async logout(id: Types.ObjectId): Promise<void> {
         await this.userService.updateRtHash(id, null);
     }
@@ -60,8 +77,16 @@ export class AuthService {
             throw new UnauthorizedException(Errors.RT_HASH_NOT_FOUND);
         const rtMatches = await this.compareTokens(rt, user.rtHash);
         if (!rtMatches) throw new UnauthorizedException(Errors.RT_HASH_INVALID);
-        const jwt = await this.getTokens(email, id);
-        return { jwt, user };
+        const jwt = await this.getTokens(email, id, user.role);
+        return {
+            jwt,
+            user: {
+                email: user.email,
+                username: user.username,
+                _id: user._id,
+                role: user.role,
+            },
+        };
     }
 
     async simpleHash(data: string): Promise<string> {
@@ -80,8 +105,12 @@ export class AuthService {
         return await compare(sha256Hash, hashedToken);
     }
 
-    async getTokens(email: string, id: Types.ObjectId): Promise<JwtTokens> {
-        const tokens = await this.generateTokens(email, id);
+    async getTokens(
+        email: string,
+        id: Types.ObjectId,
+        role: UserRole,
+    ): Promise<JwtTokens> {
+        const tokens = await this.generateTokens(email, id, role);
         const rtHash = await this.hashToken(tokens.refresh_token);
         await this.userService.updateRtHash(id, rtHash);
         return tokens;
@@ -90,17 +119,20 @@ export class AuthService {
     async generateTokens(
         email: string,
         id: Types.ObjectId,
+        role: UserRole,
     ): Promise<JwtTokens> {
         const [at, rt] = await Promise.all([
             this.generateToken(
                 email,
                 id,
+                role,
                 15 * 60,
                 this.configService.get("AT_SECRET"),
             ),
             this.generateToken(
                 email,
                 id,
+                role,
                 60 * 60 * 24 * 7,
                 this.configService.get("RT_SECRET"),
             ),
@@ -114,11 +146,13 @@ export class AuthService {
     async generateToken(
         email: string,
         id: Types.ObjectId,
+        role: UserRole,
         expiresIn: number,
         secret: string,
+        kennelId?: Types.ObjectId,
     ): Promise<string> {
         return await this.jwtService.signAsync(
-            { email, id },
+            { email, id, role, kennelId },
             { expiresIn, secret },
         );
     }
