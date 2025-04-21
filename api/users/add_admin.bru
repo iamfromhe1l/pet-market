@@ -1,0 +1,15 @@
+meta {
+  name: add_admin
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{host}}/users/add/680657b04baa654e9a86d0c7
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}
