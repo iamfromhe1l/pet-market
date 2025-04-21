@@ -1,5 +1,5 @@
-import { PawPrint } from "lucide-react"
-import Link from "next/link"
+import { PawPrint } from 'lucide-react';
+import Link from 'next/link';
 
 export const LogoLink = () => {
   return (
@@ -9,5 +9,5 @@ export const LogoLink = () => {
       </div>
       <p className="text-accent-foreground font-bold">PetMarket</p>
     </Link>
-  )
-}
+  );
+};

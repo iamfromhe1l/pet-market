@@ -34,7 +34,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { onSetUser } = useUser();
+  const { onSetUser, onGetUser, onClearUser } = useUser();
 
   const [authState, setAuthState] = useState<AuthState>({
     token: null,
@@ -54,6 +54,8 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         refreshToken,
         authenticated: true,
       });
+
+      onGetUser!();
     }
   }, []);
 
@@ -129,6 +131,8 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         refreshToken: null,
         authenticated: false,
       });
+
+      onClearUser!();
 
       return {
         data: null,
