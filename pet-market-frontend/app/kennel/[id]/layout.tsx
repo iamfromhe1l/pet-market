@@ -11,7 +11,7 @@ export default function RootLayout({
   return (
     <KennelProvider>
       <Header />
-      {children}
+      <div className="p-6">{children}</div>
     </KennelProvider>
   );
 }

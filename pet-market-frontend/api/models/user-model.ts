@@ -5,4 +5,5 @@ export interface UserModel {
   username?: string;
   email: string;
   role: UserRole;
+  kennel: string;
 }
