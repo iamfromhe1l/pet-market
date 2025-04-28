@@ -5,7 +5,13 @@ import { CreateKennelParams } from './types';
 export default class KennelApi {
   static async getPendingKennels(): Promise<KennelModel[]> {
     return (
-      await axios.get(`${process.env.NEXT_PUBLIC_API_URL!}/kennels/pending`)
+      await axios.get(`${process.env.NEXT_PUBLIC_API_URL!}/kennels/unapproved`)
+    ).data;
+  }
+
+  static async getApprovedKennels(): Promise<KennelModel[]> {
+    return (
+      await axios.get(`${process.env.NEXT_PUBLIC_API_URL!}/kennels/approved`)
     ).data;
   }
 
@@ -23,7 +29,7 @@ export default class KennelApi {
 
   static async approveKennel(kennelId: string): Promise<KennelModel> {
     return (
-      await axios.put(
+      await axios.patch(
         `${process.env.NEXT_PUBLIC_API_URL!}/kennels/approve/${kennelId}`,
       )
     ).data;
