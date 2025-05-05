@@ -1,6 +1,6 @@
 'use client';
 
-import { ShieldUser, Star, Store } from 'lucide-react';
+import { Bone, ShieldUser, Star, Store } from 'lucide-react';
 
 import {
   SidebarGroup,
@@ -34,7 +34,7 @@ export function NavOthers() {
       setNavItems([
         {
           name: 'Админ панель',
-          href: '#',
+          href: '/admin-dashboard',
           icon: ShieldUser,
         },
       ]);
@@ -44,6 +44,11 @@ export function NavOthers() {
           name: 'Панель питомника',
           href: '#',
           icon: Store,
+        },
+        {
+          name: 'Мой питомник',
+          href: `/kennel/${userState?.user?.kennel}`,
+          icon: Bone,
         },
       ]);
     } else if (role === UserRole.USER) {
