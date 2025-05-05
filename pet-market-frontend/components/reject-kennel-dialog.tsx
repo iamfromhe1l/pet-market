@@ -12,30 +12,36 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { getAxiosError } from '@/helpers/catch-error-helpers';
-import { Check } from 'lucide-react';
+import { X } from 'lucide-react';
 import Link from 'next/link';
 import { PropsWithChildren, useState } from 'react';
 import { toast } from 'sonner';
+import { Textarea } from './ui/textarea';
+import { KennelStatusEnum } from '@/types/kennel-types';
 
-interface ApproveKennelDialogProps extends PropsWithChildren {
+interface RejectKennelDialogProps extends PropsWithChildren {
   kennel: KennelModel;
-  onApproveKennel: (approvedKennel: KennelModel) => void;
+  onRejectKennel: (approvedKennel: KennelModel) => void;
 }
 
-export const ApproveKennelDialog: React.FC<ApproveKennelDialogProps> = ({
+export const RejectKennelDialog: React.FC<RejectKennelDialogProps> = ({
   children,
   kennel,
-  onApproveKennel,
+  onRejectKennel,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [reason, setReason] = useState<string>('');
 
-  const approveKennel = async () => {
+  const rejectKennel = async () => {
     setLoading(true);
     try {
-      await KennelApi.approveKennel(kennel._id);
+      await KennelApi.rejectKennel(kennel._id, {
+        adminMessage: reason,
+        status: KennelStatusEnum.REJECTED,
+      });
 
-      onApproveKennel(kennel);
+      onRejectKennel(kennel);
       setIsOpen(false);
     } catch (e) {
       const data = getAxiosError<KennelModel[]>(e);
@@ -51,11 +57,9 @@ export const ApproveKennelDialog: React.FC<ApproveKennelDialogProps> = ({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-left">
-            Подтверждение питомника
-          </DialogTitle>
+          <DialogTitle className="text-left">Отклонение питомника</DialogTitle>
           <DialogDescription className="text-left">
-            Вы уверены, что хотите подтвердить питомник
+            Вы уверены, что хотите отклонить заявку питомника
             <Link
               href={`kennel/${kennel._id}`}
               className="font-bold underline underline-offset-4"
@@ -66,6 +70,11 @@ export const ApproveKennelDialog: React.FC<ApproveKennelDialogProps> = ({
             ?
           </DialogDescription>
         </DialogHeader>
+        <Textarea
+          placeholder="Напишите причину отклонения заявки"
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+        />
         <DialogFooter className="flex-row gap-4">
           <Button
             variant="secondary"
@@ -76,12 +85,13 @@ export const ApproveKennelDialog: React.FC<ApproveKennelDialogProps> = ({
             Отменить
           </Button>
           <Button
+            variant="destructive"
             className="flex-1 cursor-pointer"
-            onClick={approveKennel}
+            onClick={rejectKennel}
             disabled={loading}
           >
-            Подтвердить
-            <Check className="ml-2" />
+            Отклонить
+            <X className="ml-2" />
           </Button>
         </DialogFooter>
       </DialogContent>

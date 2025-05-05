@@ -6,6 +6,7 @@ import {
   CreditCard,
   LogOut,
   Sparkles,
+  SunMoon,
 } from 'lucide-react';
 
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
@@ -27,11 +28,15 @@ import {
 import { useUser } from '@/context/user/user-context';
 import { useAuth } from '@/context/auth/auth-context';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
 
 export const NavUser = () => {
   const { isMobile } = useSidebar();
   const { userState } = useUser();
   const { onLogout } = useAuth();
+  const { setTheme, theme } = useTheme();
+
+  const changeTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
 
   return userState?.user ? (
     <SidebarMenu>
@@ -96,6 +101,10 @@ export const NavUser = () => {
               <DropdownMenuItem>
                 <CreditCard />
                 Оплата
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={changeTheme}>
+                <SunMoon />
+                Сменить тему
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

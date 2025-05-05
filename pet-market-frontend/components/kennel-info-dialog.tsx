@@ -23,7 +23,7 @@ export const KennelInfoDialog: React.FC<KennelInfoDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="min-w-[500px]">
         <DialogHeader>
           <DialogTitle>Подробная информация</DialogTitle>
           <DialogDescription>
@@ -51,6 +51,12 @@ export const KennelInfoDialog: React.FC<KennelInfoDialogProps> = ({
               </p>
             </div>
           </div>
+          {kennel.adminMessage ? (
+            <div className="grid gap-1">
+              <Label>Причина отклонения заявки</Label>
+              <p className="text-muted-foreground">{kennel.adminMessage}</p>
+            </div>
+          ) : null}
         </div>
       </DialogContent>
     </Dialog>

@@ -2,7 +2,6 @@
 
 import { NotPublicLayout } from '@/components/not-public-layout';
 import { PageLoading } from '@/components/page-loading';
-import { SidebarLayout } from '@/components/sidebar-layout';
 import { useAuth } from '@/context/auth/auth-context';
 import { KennelProvider } from '@/context/kennel/kennel-context';
 import { useUser } from '@/context/user/user-context';
@@ -40,13 +39,7 @@ export default function RootLayout({
 
   return (
     <NotPublicLayout>
-      <SidebarLayout>
-        {loading ? (
-          <PageLoading />
-        ) : (
-          <KennelProvider>{children}</KennelProvider>
-        )}
-      </SidebarLayout>
+      {loading ? <PageLoading /> : <KennelProvider>{children}</KennelProvider>}
     </NotPublicLayout>
   );
 }

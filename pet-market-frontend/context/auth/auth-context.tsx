@@ -13,8 +13,8 @@ import React, {
   useState,
 } from 'react';
 import { useUser } from '../user/user-context';
-import { UserModel } from '@/api/models/user-model';
 import { api } from '@/api/consts';
+import { useRouter } from 'next/navigation';
 
 interface AuthState {
   token: string | null;
@@ -37,6 +37,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const router = useRouter();
   const { onSetUser, onGetUser, onClearUser } = useUser();
 
   const [authState, setAuthState] = useState<AuthState>({
@@ -66,6 +67,8 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
       clearTokens();
       onClearUser!();
+
+      router.push('/');
 
       return {
         data: null,
@@ -122,7 +125,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
             if (refreshError) {
               return Promise.reject(refreshError);
             } else {
-              return axios(originalRequest);
+              return api(originalRequest);
             }
           }
           return Promise.reject(error);
@@ -164,7 +167,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       localStorage.setItem('token', access_token);
       localStorage.setItem('refreshToken', refresh_token);
 
-      axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
 
       onSetUser!(data.user);
 
@@ -193,7 +196,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       localStorage.setItem('token', access_token);
       localStorage.setItem('refreshToken', refresh_token);
 
-      axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
 
       onSetUser!(data.user);
 

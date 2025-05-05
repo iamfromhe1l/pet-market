@@ -4,6 +4,7 @@ import { UNDEFINDED_ERROR } from '@/api/consts';
 import KennelApi from '@/api/kennel/kennel-api';
 import { KennelModel } from '@/api/models/kennel-model';
 import { KennelsApproveTable } from '@/components/kennels-approve-table';
+import { RejectedKennelsTable } from '@/components/rejected-kennels-table';
 import {
   Card,
   CardContent,
@@ -19,15 +20,18 @@ import { toast } from 'sonner';
 export default function AdminDashboaPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [kennelsForApprove, setKennelsForApprove] = useState<KennelModel[]>([]);
+  const [rejectedKennels, setRejectedKennels] = useState<KennelModel[]>([]);
 
   useEffect(() => {
-    const getAppliedKennels = async () => {
+    const getKennels = async () => {
       setLoading(true);
       try {
-        const data = await KennelApi.getPendingKennels();
+        const pendingKennelsData = await KennelApi.getPendingKennels();
+        const rejectedKennelsData = await KennelApi.getRejectedKennels();
 
         setLoading(false);
-        setKennelsForApprove(data);
+        setKennelsForApprove(pendingKennelsData);
+        setRejectedKennels(rejectedKennelsData);
       } catch (e) {
         const data = getAxiosError<KennelModel[]>(e);
 
@@ -35,7 +39,7 @@ export default function AdminDashboaPage() {
       }
     };
 
-    getAppliedKennels();
+    getKennels();
   }, []);
 
   const onApproveKennel = (approvedKennel: KennelModel) => {
@@ -44,9 +48,16 @@ export default function AdminDashboaPage() {
     );
   };
 
+  const onRejectKennel = (rejectedKennel: KennelModel) => {
+    setKennelsForApprove(
+      kennelsForApprove.filter((kennel) => kennel._id !== rejectedKennel._id),
+    );
+    setRejectedKennels([...rejectedKennels, rejectedKennel]);
+  };
+
   return (
-    <div className="p-2 sm:p-10">
-      <Card className="w-full">
+    <div className="grid gap-8">
+      <Card>
         <CardHeader>
           <CardTitle>Заявки на подтверждение питомника</CardTitle>
           <CardDescription>
@@ -60,7 +71,21 @@ export default function AdminDashboaPage() {
             <KennelsApproveTable
               kennels={kennelsForApprove}
               onApproveKennel={onApproveKennel}
+              onRejectKennel={onRejectKennel}
             />
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Отклоненные питомники</CardTitle>
+        </CardHeader>
+        <CardContent className="mx-6 overflow-hidden rounded-md border px-0">
+          {loading ? (
+            <Skeleton className="h-40 w-full rounded-md" />
+          ) : (
+            <RejectedKennelsTable kennels={rejectedKennels} />
           )}
         </CardContent>
       </Card>

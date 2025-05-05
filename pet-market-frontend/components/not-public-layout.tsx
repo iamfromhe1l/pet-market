@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import React, { PropsWithChildren, useEffect } from 'react';
 import { PageLoading } from './page-loading';
 import { toast } from 'sonner';
+import { SidebarLayout } from './sidebar-layout';
 
 export const NotPublicLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { authState, loading } = useAuth();
@@ -16,5 +17,5 @@ export const NotPublicLayout: React.FC<PropsWithChildren> = ({ children }) => {
     }
   }, [authState, loading]);
 
-  return loading ? <PageLoading /> : <>{children}</>;
+  return <SidebarLayout>{loading ? <PageLoading /> : children}</SidebarLayout>;
 };
