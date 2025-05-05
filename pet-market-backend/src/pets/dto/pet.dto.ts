@@ -23,8 +23,8 @@ export class CreatePetDto {
     @IsDateString()
     birthDate: string;
 
-    @IsMongoId()
-    category: string;
+    // @IsMongoId()
+    // category: string;
 
     @IsEnum(SexEnum)
     sex: SexEnum;
@@ -33,8 +33,8 @@ export class CreatePetDto {
     @IsNumber()
     price?: number;
 
-    @IsMongoId()
-    kennel: string;
+    // @IsMongoId()
+    // kennel: string;
 
     @MinLength(10)
     @MaxLength(300)

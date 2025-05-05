@@ -4,6 +4,8 @@ import { Types } from "mongoose";
 import { SexEnum } from "src/common/types/sex.enum";
 
 export class PetsSchema extends TimeStamps {
+    readonly _id!: Types.ObjectId;
+
     @prop({ required: true })
     title: string;
 
