@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/sidebar';
 import { useUser } from '@/context/user/user-context';
 import { useAuth } from '@/context/auth/auth-context';
+import Link from 'next/link';
 
 export const NavUser = () => {
   const { isMobile } = useSidebar();
@@ -39,7 +40,7 @@ export const NavUser = () => {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src="/avatar.jpg" alt={userState.user.username} />
@@ -79,10 +80,12 @@ export const NavUser = () => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Стать питомником
-              </DropdownMenuItem>
+              <Link href="/become-kennel">
+                <DropdownMenuItem>
+                  <Sparkles />
+                  Стать питомником
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
