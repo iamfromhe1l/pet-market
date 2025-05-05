@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/sidebar';
 import { LogoLink } from './logo-link';
 import { ComponentProps } from 'react';
-        
+
 const data = {
   navMain: [
     {
