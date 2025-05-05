@@ -1,7 +1,7 @@
 'use client';
 
-import { Header } from '@/components/header';
 import { NotPublicLayout } from '@/components/not-public-layout';
+import { SidebarLayout } from '@/components/sidebar-layout';
 
 export default function RootLayout({
   children,
@@ -10,10 +10,7 @@ export default function RootLayout({
 }>) {
   return (
     <NotPublicLayout>
-      <>
-        <Header />
-        {children}
-      </>
+      <SidebarLayout>{children}</SidebarLayout>
     </NotPublicLayout>
   );
 }

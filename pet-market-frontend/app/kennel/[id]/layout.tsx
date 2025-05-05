@@ -1,6 +1,6 @@
 'use client';
 
-import { Header } from '@/components/header';
+import { SidebarLayout } from '@/components/sidebar-layout';
 import { KennelProvider } from '@/context/kennel/kennel-context';
 
 export default function RootLayout({
@@ -10,8 +10,7 @@ export default function RootLayout({
 }>) {
   return (
     <KennelProvider>
-      <Header />
-      <div className="p-6">{children}</div>
+      <SidebarLayout>{children}</SidebarLayout>
     </KennelProvider>
   );
 }

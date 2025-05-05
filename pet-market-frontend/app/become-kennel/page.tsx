@@ -1,5 +1,4 @@
 import { BecomeKennelForm } from '@/components/become-kennel-form';
-import { LogoLink } from '@/components/logo-link';
 import {
   Card,
   CardContent,
@@ -12,13 +11,10 @@ import Image from 'next/image';
 export default function BecomeKennelPage() {
   return (
     <div>
-      <div className="flex justify-center p-6 md:justify-start md:p-10">
-        <LogoLink />
-      </div>
       <div className="flex flex-col items-center gap-4 px-6">
-        <div className="flex w-full flex-col gap-4 lg:flex-row">
+        <div className="flex w-full flex-col gap-4 xl:flex-row">
           <div className="relative flex-1">
-            <div className="bg-muted relative h-40 overflow-hidden rounded-md lg:h-52">
+            <div className="bg-muted relative h-40 overflow-hidden rounded-md xl:h-52">
               <Image
                 src="/become-kennel-cat.jpg"
                 alt="become-kennel-cat"
@@ -32,7 +28,7 @@ export default function BecomeKennelPage() {
             </p>
           </div>
           <div className="relative flex-1">
-            <div className="bg-muted relative h-40 overflow-hidden rounded-md lg:h-52">
+            <div className="bg-muted relative h-40 overflow-hidden rounded-md xl:h-52">
               <Image
                 src="/become-kennel-cat1.jpg"
                 alt="become-kennel-cat"

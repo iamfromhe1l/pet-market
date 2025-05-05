@@ -1,26 +1,16 @@
 'use client';
 
-import * as React from 'react';
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
+  AlignLeft,
+  Bone,
   Home,
-  Map,
   Package,
-  PieChart,
+  Search,
   Settings2,
-  ShieldUser,
-  SquareTerminal,
-  Star,
-  Store,
 } from 'lucide-react';
 
 import { NavMain } from '@/components/nav-main';
-import { NavProjects } from '@/components/nav-projects';
+import { NavOthers } from '@/components/nav-others';
 import { NavUser } from '@/components/nav-user';
 import {
   Sidebar,
@@ -30,8 +20,8 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { LogoLink } from './logo-link';
+import { ComponentProps } from 'react';
 
-// This is sample data.
 const data = {
   navMain: [
     {
@@ -41,16 +31,24 @@ const data = {
       isActive: true,
       items: [
         {
-          title: 'Расширенный поиск',
-          url: '#',
+          name: 'Главная',
+          icon: Home,
+          href: '/',
         },
         {
-          title: 'Питомники',
-          url: '#',
+          name: 'Расширенный поиск',
+          icon: Search,
+          href: '/search',
         },
         {
-          title: 'Категории',
-          url: '#',
+          name: 'Питомники',
+          icon: Bone,
+          href: '/all-kennels',
+        },
+        {
+          name: 'Категории',
+          icon: AlignLeft,
+          href: '/categories',
         },
       ],
     },
@@ -60,8 +58,9 @@ const data = {
       icon: Package,
       items: [
         {
-          title: 'История',
-          url: '#',
+          name: 'Все заказы',
+          icon: Package,
+          href: '#',
         },
       ],
     },
@@ -71,40 +70,24 @@ const data = {
       icon: Settings2,
       items: [
         {
-          title: 'Главная',
-          url: '#',
+          name: 'Главная',
+          href: '#',
         },
         {
-          title: 'Аккаунт',
-          url: '#',
+          name: 'Аккаунт',
+          href: '#',
         },
         {
-          title: 'Заказы',
-          url: '#',
+          name: 'Заказы',
+          href: '#',
         },
       ],
     },
   ],
-  projects: [
-    {
-      name: 'Отзывы',
-      url: '#',
-      icon: Star,
-    },
-    {
-      name: 'Админ панель',
-      url: '#',
-      icon: ShieldUser,
-    },
-    {
-      name: 'Панель питомника',
-      url: '#',
-      icon: Store,
-    },
-  ],
+  projects: [],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -112,7 +95,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavOthers />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
