@@ -1,0 +1,15 @@
+meta {
+  name: Get_all_Kennels
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host}}/kennels
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}

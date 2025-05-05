@@ -1,0 +1,15 @@
+meta {
+  name: Get_unapproved_Kennels copy
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{host}}/kennels/unapproved
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}

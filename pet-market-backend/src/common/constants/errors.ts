@@ -9,4 +9,7 @@ export enum Errors {
     CONNECTION_ERROR = "Ошибка подключения к серверу!",
     SERVER_ERROR = "Ошибка на сервере 404!",
     UNEXPECTED_ERROR = "Неизвестная ошибка!",
+    USER_ALREADY_IN_KENNEL = "Пользователь уже в одном из питомников",
+    YOU_ALREADY_IN_KENNEL = "У вас уже есть заявленный питомник",
+    USER_IS_ADMIN = "Пользователь является админом",
 }
