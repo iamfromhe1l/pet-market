@@ -14,6 +14,7 @@ import React, {
 } from 'react';
 import { useUser } from '../user/user-context';
 import { UserModel } from '@/api/models/user-model';
+import { api } from '@/api/consts';
 
 interface AuthState {
   token: string | null;
@@ -50,6 +51,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     localStorage.removeItem('refreshToken');
 
     axios.defaults.headers.common['Authorization'] = '';
+    api.defaults.headers.common['Authorization'] = '';
 
     setAuthState({
       token: null,
@@ -58,12 +60,77 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     });
   };
 
+  const logout = async (): Promise<BaseResponse> => {
+    try {
+      await AuthApi.logout();
+
+      clearTokens();
+      onClearUser!();
+
+      return {
+        data: null,
+      };
+    } catch (e: unknown) {
+      return getAxiosError(e);
+    }
+  };
+
+  const refresh = async () => {
+    try {
+      const data = await AuthApi.refresh();
+
+      const { access_token, refresh_token } = data.jwt;
+
+      setAuthState({
+        token: access_token,
+        refreshToken: refresh_token,
+        authenticated: true,
+      });
+
+      localStorage.setItem('token', access_token);
+      localStorage.setItem('refreshToken', refresh_token);
+
+      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+
+      onSetUser!(data.user);
+    } catch (e) {
+      clearTokens();
+      onClearUser!();
+
+      return e;
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refreshToken');
 
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      api.interceptors.response.use(
+        (response) => {
+          return response;
+        },
+        async (error) => {
+          const originalRequest = error.config;
+          const alreadyRefreshed = originalRequest._alreadyRefreshed;
+
+          if (error.response?.status === 401 && !alreadyRefreshed) {
+            originalRequest._alreadyRefreshed = true;
+
+            const refreshError = await refresh();
+
+            if (refreshError) {
+              return Promise.reject(refreshError);
+            } else {
+              return axios(originalRequest);
+            }
+          }
+          return Promise.reject(error);
+        },
+      );
+
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axios.defaults.headers.common['Authorization'] = `Bearer ${refreshToken}`;
 
       setAuthState({
         token,
@@ -71,12 +138,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         authenticated: true,
       });
 
-      onGetUser!().then((data: BaseResponse<UserModel>) => {
-        console.log(data);
-        if (data.error) {
-          // refresh token
-          clearTokens();
-        }
+      onGetUser!().then(() => {
         setLoading(false);
       });
     } else {
@@ -140,21 +202,6 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       };
     } catch (e: unknown) {
       return getAxiosError<AuthResponse>(e);
-    }
-  };
-
-  const logout = async (): Promise<BaseResponse> => {
-    try {
-      await AuthApi.logout();
-
-      clearTokens();
-      onClearUser!();
-
-      return {
-        data: null,
-      };
-    } catch (e: unknown) {
-      return getAxiosError(e);
     }
   };
 

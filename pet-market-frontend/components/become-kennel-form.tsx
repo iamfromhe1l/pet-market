@@ -92,42 +92,46 @@ export const BecomeKennelForm = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Описание питомника</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      disabled={loading}
-                      id="description"
-                      placeholder="Введите описание питомника"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Адрес</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      disabled={loading}
-                      id="address"
-                      placeholder="Введите адрес питомника"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex flex-col gap-4 xl:flex-row">
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Описание питомника</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        disabled={loading}
+                        id="description"
+                        className="min-h-28"
+                        placeholder="Введите описание питомника"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Адрес</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        disabled={loading}
+                        id="address"
+                        className="min-h-28"
+                        placeholder="Введите адрес питомника"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
         </div>
         <Button

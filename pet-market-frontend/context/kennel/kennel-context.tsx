@@ -55,6 +55,9 @@ export const KennelProvider: React.FC<PropsWithChildren> = ({ children }) => {
       const data = await KennelApi.getKennel(kennelId);
 
       setLoading(false);
+      setKennelState({
+        kennel: data,
+      });
 
       return {
         data,

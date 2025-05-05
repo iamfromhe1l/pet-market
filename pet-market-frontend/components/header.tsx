@@ -26,6 +26,14 @@ export const Header = () => {
             </Button>
           </Link>
         ) : null}
+        {userState?.user?.role === UserRole.SELLER && userState.user.kennel ? (
+          <Link href={`/kennel/${userState.user.kennel}`}>
+            <Button className="cursor-pointer" size="lg">
+              <ShieldUser />
+              Мой питомник
+            </Button>
+          </Link>
+        ) : null}
         {authState?.authenticated ? (
           <Button className="cursor-pointer" size="lg" onClick={onLogout}>
             <LogOut />
