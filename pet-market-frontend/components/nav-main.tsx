@@ -74,6 +74,7 @@ export function NavMain({
                           {subItem.icon && <subItem.icon />}
                           <span>{subItem.name}</span>
                         </Link>
+
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}
