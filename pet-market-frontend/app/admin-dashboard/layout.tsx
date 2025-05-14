@@ -2,11 +2,14 @@
 
 import { NotPublicLayout } from '@/components/not-public-layout';
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <NotPublicLayout>{children}</NotPublicLayout>;
+  return (
+    <NotPublicLayout sidebarProps={{ pageTitle: 'Админ панель' }}>
+      {children}
+    </NotPublicLayout>
+  );
 }

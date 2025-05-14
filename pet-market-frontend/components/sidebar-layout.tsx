@@ -10,7 +10,14 @@ import { useAuth } from '@/context/auth/auth-context';
 import { User } from 'lucide-react';
 import Link from 'next/link';
 
-export const SidebarLayout: React.FC<PropsWithChildren> = ({ children }) => {
+export interface SidebarLayoutProps extends PropsWithChildren {
+  pageTitle?: string;
+}
+
+export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
+  children,
+  pageTitle = '',
+}) => {
   const { authState } = useAuth();
 
   return (
