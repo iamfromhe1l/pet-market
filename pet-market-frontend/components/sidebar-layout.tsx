@@ -11,7 +11,7 @@ import { User } from 'lucide-react';
 import Link from 'next/link';
 import { Separator } from './ui/separator';
 
-interface SidebarLayoutProps extends PropsWithChildren {
+export interface SidebarLayoutProps extends PropsWithChildren {
   pageTitle?: string;
 }
 
