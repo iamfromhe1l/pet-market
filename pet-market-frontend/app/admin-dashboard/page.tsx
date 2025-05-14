@@ -60,6 +60,13 @@ export default function AdminDashboaPage() {
     setRejectedKennels([...rejectedKennels, rejectedKennel]);
   };
 
+  const onRejectKennel = (rejectedKennel: KennelModel) => {
+    setKennelsForApprove(
+      kennelsForApprove.filter((kennel) => kennel._id !== rejectedKennel._id),
+    );
+    setRejectedKennels([...rejectedKennels, rejectedKennel]);
+  };
+
   return (
     <div className="flex flex-col gap-12">
       <div className="flex flex-col gap-6 md:flex-row">
