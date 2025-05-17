@@ -1,0 +1,22 @@
+meta {
+  name: rejected_Kennels
+  type: http
+  seq: 10
+}
+
+patch {
+  url: {{host}}/kennels/reject/6806981dd77768e4671d448c
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}
+
+body:json {
+  {
+    "adminMessage": "Idi otsuda",
+    "status": "rejected"
+  }
+}

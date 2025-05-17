@@ -65,10 +65,24 @@ export class CategoriesService {
         return category;
     }
 
+    async checkCategory(
+        kennelId: Types.ObjectId,
+        categoryId: Types.ObjectId,
+    ): Promise<DocumentType<CategoriesSchema>> {
+        const category = await this.getCategory(categoryId);
+        console.log(category);
+        if (category.isSystem) return category;
+        if (category.ownerKennelId != kennelId)
+            throw new ForbiddenException(Errors.MISMATCH_CATEGORIES_ID);
+        return category;
+    }
+
     async getCategory(
         categoryId: Types.ObjectId,
     ): Promise<DocumentType<CategoriesSchema>> {
-        const category = this.categoriesSchema.findById(categoryId).exec();
+        const category = await this.categoriesSchema
+            .findById(categoryId)
+            .exec();
         if (!category) throw new NotFoundException(Errors.CATEGORY_NOT_EXIST);
         return category;
     }

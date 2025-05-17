@@ -8,7 +8,9 @@ import { TypegooseModule } from "nestjs-typegoose";
 import { AuthModule } from "./auth/auth.module";
 import { AtGuard } from "./auth/guards/at.guard";
 import { APP_GUARD } from "@nestjs/core";
+import { KennelsModule } from "./kennels/kennels.module";
 import { RBACGuard } from "./auth/guards/rbac.guard";
+import { PetsModule } from "./pets/pets.module";
 import { CategoriesModule } from "./categories/categories.module";
 
 @Module({
@@ -21,6 +23,8 @@ import { CategoriesModule } from "./categories/categories.module";
         }),
         UsersModule,
         AuthModule,
+        PetsModule,
+        KennelsModule,
         CategoriesModule,
     ],
     controllers: [AppController],

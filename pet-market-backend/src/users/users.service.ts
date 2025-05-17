@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+} from "@nestjs/common";
 import { InjectModel } from "nestjs-typegoose";
 import { UsersSchema } from "./users.schema";
 import { ReturnModelType } from "@typegoose/typegoose";
@@ -34,6 +38,7 @@ export class UsersService {
             username: user.username,
             _id: user._id,
             role: user.role,
+            kennel: user!.kennelId,
         };
     }
 
@@ -53,7 +58,11 @@ export class UsersService {
     }
 
     async setUserRole(id: Types.ObjectId, role: UserRole): Promise<void> {
-        this.usersSchema.findByIdAndUpdate(id, { $set: { role } });
+        await this.usersSchema.findByIdAndUpdate(
+            id,
+            { $set: { role } },
+            { new: true },
+        );
     }
 
     async addAdmin(id: Types.ObjectId): Promise<void> {
@@ -62,5 +71,22 @@ export class UsersService {
 
     async removeAdmin(id: Types.ObjectId): Promise<void> {
         await this.setUserRole(id, UserRole.USER);
+    }
+
+    async setKennelId(kennelId: Types.ObjectId, userId: Types.ObjectId) {
+        await this.usersSchema.findByIdAndUpdate(userId, {
+            kennelId: kennelId,
+        });
+    }
+
+    async unsetKennelId(userId: Types.ObjectId) {
+        await this.usersSchema.findByIdAndUpdate(userId, { kennelId: null });
+    }
+
+    async deleteKennelFromUsers(kennelId: Types.ObjectId) {
+        await this.usersSchema.updateMany(
+            { kennelId: kennelId },
+            { role: UserRole.USER, kennelId: null },
+        );
     }
 }

@@ -1,0 +1,23 @@
+meta {
+  name: search_pet
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{host}}/pets/search
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "sex": "male",
+    "categoryId": ["682900e0a611be42295fee3f", "6829042ac7375cda01879912"],
+    "orderBy": "price",
+    "order": "desc",
+    "limit": 1,
+    "page": 2
+  }
+  
+}

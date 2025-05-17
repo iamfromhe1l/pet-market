@@ -1,0 +1,24 @@
+meta {
+  name: Create_Kennel
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/api/kennels
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}
+
+body:json {
+  {
+    "name": "Шарага",
+    "address": "Кремлевская, д. 14",
+    "description": "Худшее заведение, выпускаем фейковых специалистов"
+  }
+  
+}

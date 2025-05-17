@@ -1,0 +1,15 @@
+meta {
+  name: leave_Kennel
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{host}}/kennels/6828fc3338bb16860552ac4c
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}

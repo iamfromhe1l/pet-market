@@ -1,0 +1,24 @@
+meta {
+  name: create_pet
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/pets/kennels/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "Барсик",
+    "birthDate": "2022-01-01T00:00:00.000Z",
+    "sex": "male",
+    "description": "Милая кошка",
+    "price": 1000000,
+    "categoryId": "682900e0a611be42295fee3f",
+    "breed": "Британская короткошёрстная"
+  }
+  
+}

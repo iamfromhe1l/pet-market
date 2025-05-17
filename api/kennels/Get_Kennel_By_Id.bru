@@ -1,0 +1,15 @@
+meta {
+  name: Get_Kennel_By_Id
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{host}}/kennels/68069d5cdf71ffad01c6aee7
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}

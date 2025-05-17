@@ -9,8 +9,12 @@ export enum Errors {
     CATEGORY_NOT_EXIST = "Категория с таким id не существует!",
     CANT_CHANGE_SYSTEM_CATEGORY = "Нельзя удалять системные категории!",
     NOT_SYSTEM_CATEGORY = "Не системная категория!",
-    MISMATCH_CATEGORIES_ID = "Нельзя удалить чужую кастомную категорию!!",
+    MISMATCH_CATEGORIES_ID = "Такой категории не существует!",
     CONNECTION_ERROR = "Ошибка подключения к серверу!",
     SERVER_ERROR = "Ошибка на сервере 404!",
     UNEXPECTED_ERROR = "Неизвестная ошибка!",
+    USER_ALREADY_IN_KENNEL = "Пользователь уже в одном из питомников",
+    YOU_ALREADY_IN_KENNEL = "У вас уже есть заявленный питомник",
+    USER_IS_ADMIN = "Пользователь является админом",
+    PET_NOT_FOUND = "Питомец с таким Id не найден",
 }

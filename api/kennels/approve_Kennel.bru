@@ -1,0 +1,15 @@
+meta {
+  name: approve_Kennel
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{host}}/kennels/approve/68290290cd909e528ee41686
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}

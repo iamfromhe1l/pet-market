@@ -56,7 +56,7 @@ export class AuthService {
             jwt: await this.getTokens(
                 dto.email,
                 userId,
-                UserRole.USER,
+                user.role,
                 user.kennelId,
             ),
             user: {
