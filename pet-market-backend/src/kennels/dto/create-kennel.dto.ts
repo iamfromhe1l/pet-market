@@ -1,4 +1,10 @@
-import { IsString, MaxLength, IsNotEmpty, MinLength } from "class-validator";
+import {
+    IsString,
+    MaxLength,
+    IsNotEmpty,
+    MinLength,
+    IsOptional,
+} from "class-validator";
 
 export enum KennelStatus {
     pending = "pending",
@@ -6,16 +12,6 @@ export enum KennelStatus {
     rejected = "rejected",
     disabled = "disabled",
 }
-
-// class SupportInfo {
-//     @IsOptional()
-//     @IsString()
-//     phone?: string;
-
-//     @IsOptional()
-//     @IsString()
-//     telegramHandle?: string;
-// }
 
 export class CreateKennelDto {
     @IsString()

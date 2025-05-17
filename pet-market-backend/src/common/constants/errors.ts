@@ -12,4 +12,5 @@ export enum Errors {
     USER_ALREADY_IN_KENNEL = "Пользователь уже в одном из питомников",
     YOU_ALREADY_IN_KENNEL = "У вас уже есть заявленный питомник",
     USER_IS_ADMIN = "Пользователь является админом",
+    PET_NOT_FOUND = "Питомец с таким Id не найден",
 }

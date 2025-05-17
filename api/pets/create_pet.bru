@@ -1,0 +1,22 @@
+meta {
+  name: create_pet
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/pets/kennels/681943ff4f1a73c734ba7d94
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "Барсик",
+    "birthDate": "2022-01-01T00:00:00.000Z",
+    "sex": "male",
+    "description": "Очень активный котёнок",
+    "price": 200
+  }
+  
+}

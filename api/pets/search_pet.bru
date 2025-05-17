@@ -1,0 +1,19 @@
+meta {
+  name: search_pet
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{host}}/pets/search
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "мур",
+    "sex": "male"
+  }
+  
+}

@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import { Injectable, BadRequestException, Type } from "@nestjs/common";
 import { KennelsSchema } from "./kennels.schema";
 import { InjectModel } from "nestjs-typegoose";
 import { ReturnModelType } from "@typegoose/typegoose";
@@ -7,9 +7,9 @@ import { Types } from "mongoose";
 import { KennelStatusEnum } from "src/common/types/kennel-status";
 import { UsersService } from "../users/users.service";
 import { UserRole } from "src/common/types/roles.enum";
-import { promises } from "dns";
 import { Errors } from "src/common/constants/errors";
 import { ReviewKennelDto } from "./dto/review-kennel.dto";
+import { SupportInfoDto } from "./dto/add.support.info.dto";
 
 @Injectable()
 export class KennelsService {
@@ -105,6 +105,14 @@ export class KennelsService {
         await this.usersService.setKennelId(kennelId, userId);
         await this.usersService.setUserRole(userId, UserRole.SELLER);
     }
-    //отклонение запросов на подтверждение питомника.
-    //если reject питомник, то нужна функция ChangeApplication(в которой меняется информация о питомнике и статус ставится на Pending), в начале функции проверяем, что только rejected, для disabled не будет работать.
+
+    async SetSupportInfo(kennelId: Types.ObjectId, dto: SupportInfoDto) {
+        return this.kennelsSchema.findByIdAndUpdate(
+            kennelId,
+            {
+                supportInfo: { ...dto },
+            },
+            { new: true },
+        );
+    }
 }

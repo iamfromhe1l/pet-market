@@ -1,7 +1,8 @@
-import { prop } from "@typegoose/typegoose";
+import { prop, Ref } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Types } from "mongoose";
 import { SexEnum } from "src/common/types/sex.enum";
+import { KennelsSchema } from "src/kennels/kennels.schema";
 
 export class PetsSchema extends TimeStamps {
     readonly _id!: Types.ObjectId;
@@ -21,8 +22,8 @@ export class PetsSchema extends TimeStamps {
     @prop()
     price: number;
 
-    // @prop({ required: true, ref: () => KennelsSchema })
-    // kennel: Ref<KennelsSchema>;
+    @prop({ required: true, ref: () => KennelsSchema })
+    kennel: Ref<KennelsSchema>;
 
     @prop()
     description: string;
