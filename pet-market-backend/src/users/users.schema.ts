@@ -33,8 +33,8 @@ export class UsersSchema extends TimeStamps {
     @prop({ default: null, nullable: true })
     rtHash?: string | null;
 
-    @prop({ type: () => Types.ObjectId })
-    kennel?: Types.ObjectId;
+    // @prop({ type: () => Types.ObjectId }) use Ref arbuz like in CategoriesSchema
+    // kennel?: Types.ObjectId; here too
 
     @prop({ required: true, enum: UserRole, default: UserRole.USER })
     role: UserRole;
