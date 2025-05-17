@@ -11,6 +11,9 @@ import React, {
   useContext,
   useState,
 } from 'react';
+import { useUser } from '../user/user-context';
+import { UserRole } from '@/types/user-types';
+import { UserModel } from '@/api/models/user-model';
 
 interface KennelState {
   kennel?: KennelModel;
@@ -30,6 +33,8 @@ const KennelContext = createContext<KennelProps>({});
 export const useKennel = () => useContext(KennelContext);
 
 export const KennelProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const { onSetUser, userState } = useUser();
+
   const [kennelState, setKennelState] = useState({});
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -38,6 +43,11 @@ export const KennelProvider: React.FC<PropsWithChildren> = ({ children }) => {
   ): Promise<BaseResponse<KennelModel>> => {
     try {
       const data = await KennelApi.createKennel(params);
+
+      onSetUser!({
+        ...(userState?.user as UserModel),
+        role: UserRole.SELLER,
+      });
 
       return {
         data,

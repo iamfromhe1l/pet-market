@@ -34,7 +34,7 @@ export class UsersSchema extends TimeStamps {
     rtHash?: string | null;
 
     @prop({ type: () => Types.ObjectId })
-    kennel?: Types.ObjectId;
+    kennelId?: Types.ObjectId;
 
     @prop({ required: true, enum: UserRole, default: UserRole.USER })
     role: UserRole;

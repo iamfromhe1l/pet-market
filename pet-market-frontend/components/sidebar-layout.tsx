@@ -1,5 +1,4 @@
-'use client';
-
+import React, { PropsWithChildren } from 'react';
 import { AppSidebar } from '@/components/app-sidebar';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,8 +9,16 @@ import {
 import { useAuth } from '@/context/auth/auth-context';
 import { User } from 'lucide-react';
 import Link from 'next/link';
+import { Separator } from './ui/separator';
 
-export default function Page() {
+export interface SidebarLayoutProps extends PropsWithChildren {
+  pageTitle?: string;
+}
+
+export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
+  children,
+  pageTitle = '',
+}) => {
   const { authState } = useAuth();
 
   return (
@@ -20,7 +27,13 @@ export default function Page() {
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex flex-1 items-center justify-between px-4">
-            <SidebarTrigger className="-ml-1" />
+            <div className="flex items-center gap-4">
+              <SidebarTrigger className="-ml-1 cursor-pointer" />
+              <div className="h-4">
+                <Separator orientation="vertical" />
+              </div>
+              <p className="text-sm font-semibold">{pageTitle}</p>
+            </div>
             {authState?.authenticated ? null : (
               <Link href="/login">
                 <Button className="cursor-pointer">
@@ -31,15 +44,12 @@ export default function Page() {
             )}
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="bg-muted/50 aspect-video rounded-xl" />
-            <div className="bg-muted/50 aspect-video rounded-xl" />
-            <div className="bg-muted/50 aspect-video rounded-xl" />
+        <div className="flex flex-1 flex-col">
+          <div className="@container/main flex flex-1 flex-col gap-2">
+            <div className="flex flex-col gap-4 p-4 pt-0">{children}</div>
           </div>
-          <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
         </div>
       </SidebarInset>
     </SidebarProvider>
   );
-}
+};

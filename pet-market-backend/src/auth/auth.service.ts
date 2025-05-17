@@ -35,12 +35,7 @@ export class AuthService {
         // TODO return id at once in createUser()
 
         return {
-            jwt: await this.getTokens(
-                dto.email,
-                userId,
-                UserRole.USER,
-                user.kennel,
-            ),
+            jwt: await this.getTokens(dto.email, userId, UserRole.USER),
             user: {
                 email: user.email,
                 username: user.username,
@@ -62,13 +57,14 @@ export class AuthService {
                 dto.email,
                 userId,
                 UserRole.USER,
-                user.kennel,
+                user.kennelId,
             ),
             user: {
                 email: user.email,
                 username: user.username,
                 _id: user._id,
                 role: user.role,
+                kennelId: user.kennelId,
             },
         };
     }
@@ -87,7 +83,7 @@ export class AuthService {
             throw new UnauthorizedException(Errors.RT_HASH_NOT_FOUND);
         const rtMatches = await this.compareTokens(rt, user.rtHash);
         if (!rtMatches) throw new UnauthorizedException(Errors.RT_HASH_INVALID);
-        const jwt = await this.getTokens(email, id, user.role, user.kennel);
+        const jwt = await this.getTokens(email, id, user.role, user.kennelId);
         return {
             jwt,
             user: {
@@ -95,6 +91,7 @@ export class AuthService {
                 username: user.username,
                 _id: user._id,
                 role: user.role,
+                kennelId: user.kennelId,
             },
         };
     }
@@ -119,9 +116,9 @@ export class AuthService {
         email: string,
         id: Types.ObjectId,
         role: UserRole,
-        kennel?: Types.ObjectId,
+        kennelId?: Types.ObjectId,
     ): Promise<JwtTokens> {
-        const tokens = await this.generateTokens(email, id, role, kennel);
+        const tokens = await this.generateTokens(email, id, role, kennelId);
         const rtHash = await this.hashToken(tokens.refresh_token);
         await this.userService.updateRtHash(id, rtHash);
         return tokens;
@@ -131,7 +128,7 @@ export class AuthService {
         email: string,
         id: Types.ObjectId,
         role: UserRole,
-        kennel: Types.ObjectId,
+        kennelId?: Types.ObjectId,
     ): Promise<JwtTokens> {
         const [at, rt] = await Promise.all([
             this.generateToken(
@@ -140,7 +137,7 @@ export class AuthService {
                 role,
                 15 * 60,
                 this.configService.get("AT_SECRET"),
-                kennel,
+                kennelId,
             ),
             this.generateToken(
                 email,
@@ -148,7 +145,7 @@ export class AuthService {
                 role,
                 60 * 60 * 24 * 7,
                 this.configService.get("RT_SECRET"),
-                kennel,
+                kennelId,
             ),
         ]);
         return {

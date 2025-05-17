@@ -11,6 +11,7 @@ import {
 import React, { PropsWithChildren } from 'react';
 import { KENNEL_STATUS } from '@/consts/kennel-consts';
 import { Label } from './ui/label';
+import Link from 'next/link';
 
 interface KennelInfoDialogProps extends PropsWithChildren {
   kennel: KennelModel;
@@ -23,11 +24,14 @@ export const KennelInfoDialog: React.FC<KennelInfoDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="min-w-[500px]">
         <DialogHeader>
           <DialogTitle>Подробная информация</DialogTitle>
-          <DialogDescription>
-            Подробная информация про питомник <b>&quot;{kennel.name}&quot;</b>
+          <DialogDescription className="flex gap-2">
+            Подробная информация про питомник{' '}
+            <Link className="flex underline" href={`/kennel/${kennel._id}`}>
+              &quot;{kennel.name}&quot;
+            </Link>
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-6">
@@ -51,6 +55,12 @@ export const KennelInfoDialog: React.FC<KennelInfoDialogProps> = ({
               </p>
             </div>
           </div>
+          {kennel.adminMessage ? (
+            <div className="grid gap-1">
+              <Label>Причина отклонения заявки</Label>
+              <p className="text-muted-foreground">{kennel.adminMessage}</p>
+            </div>
+          ) : null}
         </div>
       </DialogContent>
     </Dialog>

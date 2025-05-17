@@ -21,7 +21,7 @@ export class KennelsService {
     async createKennel(dto: CreateKennelDto, userId: Types.ObjectId) {
         const user = await this.usersService.getUserById(userId);
         console.log(user);
-        if (user.kennel) {
+        if (user.kennelId) {
             throw new BadRequestException(Errors.YOU_ALREADY_IN_KENNEL);
         }
         const newKennel = new this.kennelsSchema({
@@ -100,7 +100,7 @@ export class KennelsService {
         const user = await this.usersService.getUserById(userId);
         if (user.role == UserRole.ADMIN)
             throw new BadRequestException(Errors.USER_IS_ADMIN);
-        if (user.kennel)
+        if (user.kennelId)
             throw new BadRequestException(Errors.USER_ALREADY_IN_KENNEL);
         await this.usersService.setKennelId(kennelId, userId);
         await this.usersService.setUserRole(userId, UserRole.SELLER);

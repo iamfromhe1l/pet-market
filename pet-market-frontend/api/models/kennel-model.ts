@@ -6,4 +6,5 @@ export interface KennelModel {
   description: string;
   address: string;
   status: KennelStatusEnum;
+  adminMessage?: string;
 }

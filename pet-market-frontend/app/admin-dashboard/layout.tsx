@@ -1,6 +1,5 @@
 'use client';
 
-import { Header } from '@/components/header';
 import { NotPublicLayout } from '@/components/not-public-layout';
 
 export default function RootLayout({
@@ -9,11 +8,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <NotPublicLayout>
-      <>
-        <Header />
-        {children}
-      </>
+    <NotPublicLayout sidebarProps={{ pageTitle: 'Админ панель' }}>
+      {children}
     </NotPublicLayout>
   );
 }

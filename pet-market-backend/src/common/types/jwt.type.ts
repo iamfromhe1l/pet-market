@@ -13,6 +13,6 @@ export type SignType = {
         username: string;
         _id: Types.ObjectId;
         role: UserRole;
-        kennel?: Types.ObjectId;
+        kennelId?: Types.ObjectId;
     };
 };

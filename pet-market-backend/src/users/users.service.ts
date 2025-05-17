@@ -38,7 +38,7 @@ export class UsersService {
             username: user.username,
             _id: user._id,
             role: user.role,
-            kennel: user!.kennel,
+            kennel: user!.kennelId,
         };
     }
 

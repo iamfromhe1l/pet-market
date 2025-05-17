@@ -28,9 +28,4 @@ export class UsersController {
     ) {
         return this.usersService.removeAdmin(userId);
     }
-
-    // @Get("adm")
-    // async setAdmTemp() {
-    //     return;
-    // }
 }

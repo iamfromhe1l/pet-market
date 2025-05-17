@@ -9,7 +9,7 @@ interface CategoriesProps {
 
 export const Categories: React.FC<CategoriesProps> = ({ categories }) => {
   return (
-    <div className="grid grid-cols-1 justify-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-1 justify-center gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {categories.map((category, index) => (
         <Card key={index} className="relative h-60 gap-0 overflow-hidden p-0">
           <CardContent className="relative flex-1 rounded-t-md p-0">

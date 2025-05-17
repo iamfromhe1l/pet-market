@@ -11,6 +11,7 @@ import { APP_GUARD } from "@nestjs/core";
 import { KennelsModule } from "./kennels/kennels.module";
 import { RBACGuard } from "./auth/guards/rbac.guard";
 import { PetsModule } from "./pets/pets.module";
+import { CategoriesModule } from "./categories/categories.module";
 
 @Module({
     imports: [
@@ -24,6 +25,7 @@ import { PetsModule } from "./pets/pets.module";
         AuthModule,
         PetsModule,
         KennelsModule,
+        CategoriesModule,
     ],
     controllers: [AppController],
     providers: [
