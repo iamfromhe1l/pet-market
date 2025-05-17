@@ -12,11 +12,8 @@ export class CategoriesSchema extends TimeStamps {
     breeds: string[];
 
     @prop({ type: () => Types.ObjectId })
-    kennel?: Types.ObjectId;
+    ownerKennelId?: Types.ObjectId;
 
     @prop({ required: true, type: () => Boolean, default: false })
     isSystem: boolean;
-
-    // @prop({ ref: () => KennelsSchema })
-    // ownerKennelId?: Ref<KennelsSchema>;
 }
