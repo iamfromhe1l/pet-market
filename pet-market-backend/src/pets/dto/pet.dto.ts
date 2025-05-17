@@ -11,6 +11,7 @@ import {
     IsMongoId,
     IsEnum,
 } from "class-validator";
+import { Types } from "mongoose";
 import { SexEnum } from "src/common/types/sex.enum";
 
 export class CreatePetDto {
@@ -23,8 +24,11 @@ export class CreatePetDto {
     @IsDateString()
     birthDate: string;
 
-    // @IsMongoId()
-    // category: string;
+    @IsString()
+    breed: string;
+
+    @IsMongoId()
+    categoryId: Types.ObjectId;
 
     @IsEnum(SexEnum)
     sex: SexEnum;
@@ -32,9 +36,6 @@ export class CreatePetDto {
     @IsOptional()
     @IsNumber()
     price?: number;
-
-    // @IsMongoId()
-    // kennel: string;
 
     @MinLength(10)
     @MaxLength(300)

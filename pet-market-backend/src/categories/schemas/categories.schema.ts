@@ -16,4 +16,7 @@ export class CategoriesSchema extends TimeStamps {
 
     @prop({ required: true, type: () => Boolean, default: false })
     isSystem: boolean;
+
+    @prop({ required: true, type: () => Boolean, default: false })
+    isDisabled: boolean;
 }

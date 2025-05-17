@@ -8,18 +8,21 @@ import { Types } from "mongoose";
 import { Errors } from "src/common/constants/errors";
 import { SearchPetDto } from "./dto/search.pet.dto";
 import { SearchResults } from "src/common/types/search.result";
+import { CategoriesService } from "src/categories/services/categories.service";
 
 @Injectable()
 export class PetsService {
     constructor(
         @InjectModel(PetsSchema)
         private readonly petsSchema: ReturnModelType<typeof PetsSchema>,
+        private readonly categoriesService: CategoriesService,
     ) {}
 
     async createPet(
         kennelId: Types.ObjectId,
         dto: CreatePetDto,
     ): Promise<PetsSchema> {
+        await this.categoriesService.checkCategory(kennelId, dto.categoryId);
         return this.petsSchema.create({
             ...dto,
             kennel: new Types.ObjectId(kennelId),
@@ -70,7 +73,12 @@ export class PetsService {
 
         if (filter.kennelId) query.kennel = filter.kennelId;
 
-        if (filter.category) query.category = filter.category;
+        if (filter.categoryId?.length)
+            query.categoryId = { $in: filter.categoryId };
+
+        if (filter.breed?.length) {
+            query.breed = { $in: filter.breed };
+        }
 
         if (filter.priceMin || filter.priceMax) {
             query.price = {};

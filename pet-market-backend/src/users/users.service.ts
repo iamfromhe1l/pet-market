@@ -74,17 +74,19 @@ export class UsersService {
     }
 
     async setKennelId(kennelId: Types.ObjectId, userId: Types.ObjectId) {
-        await this.usersSchema.findByIdAndUpdate(userId, { kennel: kennelId });
+        await this.usersSchema.findByIdAndUpdate(userId, {
+            kennelId: kennelId,
+        });
     }
 
     async unsetKennelId(userId: Types.ObjectId) {
-        await this.usersSchema.findByIdAndUpdate(userId, { kennel: null });
+        await this.usersSchema.findByIdAndUpdate(userId, { kennelId: null });
     }
 
     async deleteKennelFromUsers(kennelId: Types.ObjectId) {
         await this.usersSchema.updateMany(
-            { kennel: kennelId },
-            { role: UserRole.USER, kennel: null },
+            { kennelId: kennelId },
+            { role: UserRole.USER, kennelId: null },
         );
     }
 }

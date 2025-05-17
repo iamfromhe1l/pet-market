@@ -95,6 +95,7 @@ export class KennelsController {
         return this.kennelsService.getApprovedKennels();
     }
 
+    @Roles(UserRole.ADMIN)
     @Get("/rejected")
     async getRejectedKennels() {
         return this.kennelsService.getRejectedKennels();

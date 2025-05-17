@@ -1,4 +1,6 @@
 import {
+    IsArray,
+    IsBoolean,
     IsEnum,
     IsIn,
     IsMongoId,
@@ -6,6 +8,7 @@ import {
     IsOptional,
     IsString,
 } from "class-validator";
+import { Types } from "mongoose";
 import { SexEnum } from "src/common/types/sex.enum";
 
 export class SearchPetDto {
@@ -30,8 +33,13 @@ export class SearchPetDto {
     kennelId?: string;
 
     @IsOptional()
-    @IsMongoId()
-    category?: string;
+    @IsArray()
+    @IsMongoId({ each: true })
+    categoryId?: Types.ObjectId[];
+
+    @IsOptional()
+    @IsArray()
+    breed?: string[];
 
     @IsOptional()
     @IsNumber()
@@ -42,6 +50,7 @@ export class SearchPetDto {
     limit?: number;
 
     @IsOptional()
+    @IsBoolean()
     populateKennel?: boolean;
 
     @IsOptional()

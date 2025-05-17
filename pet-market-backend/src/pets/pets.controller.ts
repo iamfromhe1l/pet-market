@@ -15,23 +15,22 @@ import { Roles } from "src/common/decorators/role.decorator";
 import { UserRole } from "src/common/types/roles.enum";
 import { ParseObjectIdPipe } from "src/common/pipes/parse_object_id.pipe";
 import { Types } from "mongoose";
+import { GetCurrentKennelId } from "src/common/decorators/get_current_kennel_id.decorator";
 
 @Controller("pets")
 export class PetsController {
     constructor(private readonly petsService: PetsService) {}
     @Roles(UserRole.SELLER)
-    @Post("/kennels/:kennelId")
+    @Post("/kennels/")
     async createPet(
-        @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,
+        @GetCurrentKennelId() kennelId: Types.ObjectId,
         @Body() dto: CreatePetDto,
     ): Promise<PetsSchema> {
         return this.petsService.createPet(kennelId, dto);
     }
 
-    @Get("/kennels/:kennelId")
-    async getPetsByKennel(
-        @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,
-    ) {
+    @Get("/kennels/")
+    async getPetsByKennel(@GetCurrentKennelId() kennelId: Types.ObjectId) {
         return this.petsService.getPetsByKennel(kennelId);
     }
 

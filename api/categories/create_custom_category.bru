@@ -1,0 +1,22 @@
+meta {
+  name: create_custom_category
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/categories/
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}
+
+body:json {
+  {
+    "name": "Акулы",
+    "breeds": ["Тупая", "Умная", "Тигровая"]
+  }
+}

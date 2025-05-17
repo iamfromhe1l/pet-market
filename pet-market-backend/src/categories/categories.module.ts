@@ -21,7 +21,7 @@ import { CategoriesSchema } from "./schemas/categories.schema";
             },
         ]),
     ],
-    exports: [KennelCategoriesService],
+    exports: [KennelCategoriesService, CategoriesService],
     providers: [CategoriesService, KennelCategoriesService],
     controllers: [CategoriesController],
 })
