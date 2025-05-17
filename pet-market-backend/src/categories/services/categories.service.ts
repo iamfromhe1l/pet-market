@@ -35,7 +35,7 @@ export class CategoriesService {
         kennelId: Types.ObjectId,
         categoryId: Types.ObjectId,
     ) {
-        await this.getCustomCategory(kennelId, categoryId);
+        await this.checkAndGetCustomCategory(kennelId, categoryId);
         await this.categoriesSchema.findByIdAndDelete(categoryId);
     }
 
@@ -44,13 +44,16 @@ export class CategoriesService {
         categoryId: Types.ObjectId,
         dto: CreateCustomCategoryDto,
     ) {
-        const category = await this.getCustomCategory(kennelId, categoryId);
+        const category = await this.checkAndGetCustomCategory(
+            kennelId,
+            categoryId,
+        );
         category.name = dto.name;
         category.breeds = dto.breeds;
         return category.save();
     }
 
-    async getCustomCategory(
+    async checkAndGetCustomCategory(
         kennelId: Types.ObjectId,
         categoryId: Types.ObjectId,
     ): Promise<DocumentType<CategoriesSchema>> {
@@ -74,12 +77,16 @@ export class CategoriesService {
         return this.categoriesSchema.find({ isSystem: true });
     }
 
-    async createCategory() {
+    async isSystemCategory(categoryId: Types.ObjectId): Promise<boolean> {
+        return (await this.getCategory(categoryId)).isSystem;
+    }
+
+    async createSystemCategory() {
         throw new Error("nut implemented");
         // method for admins, to add system categories
     }
 
-    async deleteCategory() {
+    async deleteSystemCategory() {
         throw new Error("nut implemented");
         // method for admins, to add system categories
     }

@@ -8,6 +8,7 @@ export enum Errors {
     NOT_AUTHORIZED = "Пользователь не авторизован для этого действия!",
     CATEGORY_NOT_EXIST = "Категория с таким id не существует!",
     CANT_CHANGE_SYSTEM_CATEGORY = "Нельзя удалять системные категории!",
+    NOT_SYSTEM_CATEGORY = "Не системная категория!",
     MISMATCH_CATEGORIES_ID = "Нельзя удалить чужую кастомную категорию!!",
     CONNECTION_ERROR = "Ошибка подключения к серверу!",
     SERVER_ERROR = "Ошибка на сервере 404!",
