@@ -16,7 +16,10 @@ export class PetsService {
         private readonly petsSchema: ReturnModelType<typeof PetsSchema>,
     ) {}
 
-    async createPet(kennelId: string, dto: CreatePetDto): Promise<PetsSchema> {
+    async createPet(
+        kennelId: Types.ObjectId,
+        dto: CreatePetDto,
+    ): Promise<PetsSchema> {
         return this.petsSchema.create({
             ...dto,
             kennel: new Types.ObjectId(kennelId),
@@ -25,18 +28,18 @@ export class PetsService {
         });
     }
 
-    async getPetsByKennel(kennelId: string): Promise<PetsSchema[]> {
+    async getPetsByKennel(kennelId: Types.ObjectId): Promise<PetsSchema[]> {
         return this.petsSchema.find({ kennel: kennelId }).exec(); //.populate('category');//.populate("kennel")
     }
 
-    async getPetById(id: string): Promise<PetsSchema> {
+    async getPetById(id: Types.ObjectId): Promise<PetsSchema> {
         const pet = this.petsSchema.findById(id);
         if (!pet) throw new NotFoundException(Errors.PET_NOT_FOUND);
         return pet;
     }
 
     async updatePet(
-        id: string,
+        id: Types.ObjectId,
         dto: Partial<CreatePetDto>,
     ): Promise<PetsSchema> {
         const updated = await this.petsSchema
@@ -47,7 +50,7 @@ export class PetsService {
         return updated;
     }
 
-    async deletePet(id: string): Promise<void> {
+    async deletePet(id: Types.ObjectId): Promise<void> {
         const deleted = await this.petsSchema.findByIdAndDelete(id).exec();
 
         if (!deleted) throw new NotFoundException(Errors.PET_NOT_FOUND);

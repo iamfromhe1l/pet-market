@@ -1,5 +1,6 @@
 import { prop } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
+import { Types } from "mongoose";
 import { KennelStatusEnum } from "src/common/types/kennel-status";
 
 class SupportInfo {
@@ -11,6 +12,8 @@ class SupportInfo {
 }
 
 export class KennelsSchema extends TimeStamps {
+    readonly _id: Types.ObjectId;
+
     @prop({ type: () => String })
     name: string;
 

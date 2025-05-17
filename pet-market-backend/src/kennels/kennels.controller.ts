@@ -19,6 +19,7 @@ import { ParseObjectIdPipe } from "src/common/pipes/parse_object_id.pipe";
 import { KennelsSchema } from "./kennels.schema";
 import { ReviewKennelDto } from "./dto/review-kennel.dto";
 import { SupportInfoDto } from "./dto/add.support.info.dto";
+import { Public } from "src/common/decorators/public.decorator";
 
 @Controller("kennels")
 export class KennelsController {
@@ -94,12 +95,18 @@ export class KennelsController {
         return this.kennelsService.getApprovedKennels();
     }
 
+    @Get("/rejected")
+    async getRejectedKennels() {
+        return this.kennelsService.getRejectedKennels();
+    }
+
     @Get("/unapproved")
     @Roles(UserRole.ADMIN)
     async getUnapprovedKennels() {
         return this.kennelsService.getUnapprovedKennels();
     }
 
+    @Public()
     @Get(":kennelId")
     async getKennelById(
         @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,

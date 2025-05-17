@@ -13,6 +13,8 @@ import { PetsSchema } from "./pets.schema";
 import { SearchPetDto } from "./dto/search.pet.dto";
 import { Roles } from "src/common/decorators/role.decorator";
 import { UserRole } from "src/common/types/roles.enum";
+import { ParseObjectIdPipe } from "src/common/pipes/parse_object_id.pipe";
+import { Types } from "mongoose";
 
 @Controller("pets")
 export class PetsController {
@@ -20,26 +22,28 @@ export class PetsController {
     @Roles(UserRole.SELLER)
     @Post("/kennels/:kennelId")
     async createPet(
-        @Param("kennelId") kennelId: string,
+        @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,
         @Body() dto: CreatePetDto,
     ): Promise<PetsSchema> {
         return this.petsService.createPet(kennelId, dto);
     }
 
     @Get("/kennels/:kennelId")
-    async getPetsByKennel(@Param("kennelId") kennelId: string) {
+    async getPetsByKennel(
+        @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,
+    ) {
         return this.petsService.getPetsByKennel(kennelId);
     }
 
     @Get(":petId")
-    async getPetById(@Param("petId") petId: string) {
+    async getPetById(@Param("petId", ParseObjectIdPipe) petId: Types.ObjectId) {
         return this.petsService.getPetById(petId);
     }
 
     @Patch(":petId")
     @Roles(UserRole.SELLER)
     async updatePet(
-        @Param("petId") petId: string,
+        @Param("petId", ParseObjectIdPipe) petId: Types.ObjectId,
         @Body() dto: Partial<CreatePetDto>,
     ) {
         return this.petsService.updatePet(petId, dto);
@@ -47,7 +51,7 @@ export class PetsController {
 
     @Roles(UserRole.SELLER)
     @Delete(":petId")
-    async deletePet(@Param("petId") petId: string) {
+    async deletePet(@Param("petId", ParseObjectIdPipe) petId: Types.ObjectId) {
         return this.petsService.deletePet(petId);
     }
 

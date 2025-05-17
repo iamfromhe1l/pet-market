@@ -10,6 +10,7 @@ import { UserRole } from "src/common/types/roles.enum";
 import { Errors } from "src/common/constants/errors";
 import { ReviewKennelDto } from "./dto/review-kennel.dto";
 import { SupportInfoDto } from "./dto/add.support.info.dto";
+import { KennelCategoriesService } from "src/categories/services/kennel-categories.service";
 
 @Injectable()
 export class KennelsService {
@@ -17,10 +18,10 @@ export class KennelsService {
         @InjectModel(KennelsSchema)
         private readonly kennelsSchema: ReturnModelType<typeof KennelsSchema>,
         private readonly usersService: UsersService,
+        private readonly kennelCategoriesService: KennelCategoriesService,
     ) {}
     async createKennel(dto: CreateKennelDto, userId: Types.ObjectId) {
         const user = await this.usersService.getUserById(userId);
-        console.log(user);
         if (user.kennelId) {
             throw new BadRequestException(Errors.YOU_ALREADY_IN_KENNEL);
         }
@@ -32,7 +33,7 @@ export class KennelsService {
         });
         await this.usersService.setKennelId(newKennel.id, userId);
         await this.usersService.setUserRole(userId, UserRole.SELLER);
-        console.log(user);
+        await this.kennelCategoriesService.initKennelCategories(newKennel._id);
         return newKennel.save();
     }
 
@@ -79,6 +80,12 @@ export class KennelsService {
     async getUnapprovedKennels() {
         return this.kennelsSchema.find({
             status: KennelStatusEnum.PENDING,
+        });
+    }
+
+    async getRejectedKennels() {
+        return this.kennelsSchema.find({
+            status: KennelStatusEnum.REJECTED,
         });
     }
 
