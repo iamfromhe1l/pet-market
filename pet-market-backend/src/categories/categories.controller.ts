@@ -28,10 +28,10 @@ export class CategoriesController {
         return this.categoriesService.getSystemCategories();
     }
 
-    @Get("custom/:categoryId")
+    @Get("custom/:kennelId/:categoryId")
     async getCategoryById(
+        @Param("kennelId", ParseObjectIdPipe) kennelId: Types.ObjectId,
         @Param("categoryId", ParseObjectIdPipe) categoryId: Types.ObjectId,
-        @GetCurrentKennelId() kennelId: Types.ObjectId,
     ) {
         return this.categoriesService.checkAndGetCustomCategory(
             kennelId,
@@ -40,7 +40,6 @@ export class CategoriesController {
     }
 
     @Get()
-    @Roles(UserRole.SELLER)
     async getCategoriesByKennel(
         @GetCurrentKennelId() kennelId: Types.ObjectId,
     ) {
