@@ -1,0 +1,11 @@
+meta {
+  name: get_recent_pets
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host}}/public/stats
+  body: none
+  auth: inherit
+}
