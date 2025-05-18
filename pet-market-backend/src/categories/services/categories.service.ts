@@ -31,13 +31,13 @@ export class CategoriesService {
         }).save();
     }
 
-    async deleteCustomCategory(
-        kennelId: Types.ObjectId,
-        categoryId: Types.ObjectId,
-    ) {
-        await this.checkAndGetCustomCategory(kennelId, categoryId);
-        await this.categoriesSchema.findByIdAndDelete(categoryId);
-    }
+    // async deleteCustomCategory(
+    //     kennelId: Types.ObjectId,
+    //     categoryId: Types.ObjectId,
+    // ) {
+    //     await this.checkAndGetCustomCategory(kennelId, categoryId);
+    //     await this.categoriesSchema.findByIdAndDelete(categoryId);
+    // }
 
     async updateCustomCategory(
         kennelId: Types.ObjectId,
@@ -70,7 +70,6 @@ export class CategoriesService {
         categoryId: Types.ObjectId,
     ): Promise<DocumentType<CategoriesSchema>> {
         const category = await this.getCategory(categoryId);
-        console.log(category);
         if (category.isSystem) return category;
         if (category.ownerKennelId != kennelId)
             throw new ForbiddenException(Errors.MISMATCH_CATEGORIES_ID);
@@ -93,6 +92,26 @@ export class CategoriesService {
 
     async isSystemCategory(categoryId: Types.ObjectId): Promise<boolean> {
         return (await this.getCategory(categoryId)).isSystem;
+    }
+
+    async enableCategory(
+        categoryId: Types.ObjectId,
+        kennelId: Types.ObjectId,
+    ): Promise<void> {
+        const category = await this.checkCategory(kennelId, categoryId);
+        category.isDisabled = false;
+        await category.save();
+    }
+
+    async disableCategory(
+        categoryId: Types.ObjectId,
+        kennelId: Types.ObjectId,
+    ): Promise<void> {
+        const category = await this.checkCategory(kennelId, categoryId);
+        console.log(category);
+        category.isDisabled = true;
+        console.log(category);
+        await category.save();
     }
 
     async createSystemCategory() {

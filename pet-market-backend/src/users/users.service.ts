@@ -1,8 +1,4 @@
-import {
-    BadRequestException,
-    Injectable,
-    NotFoundException,
-} from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "nestjs-typegoose";
 import { UsersSchema } from "./users.schema";
 import { ReturnModelType } from "@typegoose/typegoose";
@@ -38,7 +34,7 @@ export class UsersService {
             username: user.username,
             _id: user._id,
             role: user.role,
-            kennel: user!.kennelId,
+            kennelId: user!.kennelId,
         };
     }
 

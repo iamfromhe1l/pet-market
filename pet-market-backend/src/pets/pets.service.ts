@@ -3,7 +3,6 @@ import { PetsSchema } from "./pets.schema";
 import { ReturnModelType } from "@typegoose/typegoose";
 import { InjectModel } from "nestjs-typegoose";
 import { CreatePetDto } from "./dto/pet.dto";
-import { title } from "process";
 import { Types } from "mongoose";
 import { Errors } from "src/common/constants/errors";
 import { SearchPetDto } from "./dto/search.pet.dto";
@@ -57,6 +56,20 @@ export class PetsService {
         const deleted = await this.petsSchema.findByIdAndDelete(id).exec();
 
         if (!deleted) throw new NotFoundException(Errors.PET_NOT_FOUND);
+    }
+
+    async enablePets(categoryId: Types.ObjectId) {
+        await this.petsSchema.updateMany(
+            { categoryId: categoryId },
+            { disabled: false },
+        );
+    }
+
+    async disablePets(categoryId: Types.ObjectId) {
+        await this.petsSchema.updateMany(
+            { categoryId: categoryId },
+            { disabled: true },
+        );
     }
 
     async searchPets(filter: SearchPetDto): Promise<SearchResults> {

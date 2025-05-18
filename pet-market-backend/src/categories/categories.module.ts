@@ -1,10 +1,11 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { CategoriesService } from "./services/categories.service";
 import { CategoriesController } from "./categories.controller";
 import { KennelCategoriesSchema } from "./schemas/kennel-categories.schema";
 import { KennelCategoriesService } from "./services/kennel-categories.service";
 import { TypegooseModule } from "nestjs-typegoose";
 import { CategoriesSchema } from "./schemas/categories.schema";
+import { PetsModule } from "../pets/pets.module";
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { CategoriesSchema } from "./schemas/categories.schema";
                 schemaOptions: { collection: "Categories" },
             },
         ]),
+        forwardRef(() => PetsModule),
     ],
     exports: [KennelCategoriesService, CategoriesService],
     providers: [CategoriesService, KennelCategoriesService],

@@ -57,11 +57,11 @@ export class CategoriesController {
 
     @Patch("restore/:categoryId")
     @Roles(UserRole.SELLER)
-    async restoreSystemCategory(
+    async restoreCategory(
         @GetCurrentKennelId() kennelId: Types.ObjectId,
         @Param("categoryId", ParseObjectIdPipe) categoryId: Types.ObjectId,
     ) {
-        return this.kennelCategoriesService.restoreSystemCategory(
+        return this.kennelCategoriesService.restoreCategory(
             categoryId,
             kennelId,
         );
