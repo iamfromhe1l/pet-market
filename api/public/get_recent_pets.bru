@@ -5,7 +5,11 @@ meta {
 }
 
 get {
-  url: {{host}}/public/stats
+  url: {{host}}/public/recent-pets?limit=2
   body: none
   auth: inherit
+}
+
+params:query {
+  limit: 2
 }
