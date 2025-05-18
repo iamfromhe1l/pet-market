@@ -1,0 +1,11 @@
+meta {
+  name: get_stats_for_main_page
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{host}}/public/stats
+  body: none
+  auth: inherit
+}

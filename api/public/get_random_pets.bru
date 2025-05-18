@@ -1,0 +1,15 @@
+meta {
+  name: get_random_pets
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{host}}/public/random-pets?limit=2
+  body: none
+  auth: inherit
+}
+
+params:query {
+  limit: 2
+}
