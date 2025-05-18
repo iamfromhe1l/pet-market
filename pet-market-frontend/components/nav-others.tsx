@@ -42,12 +42,12 @@ export function NavOthers() {
       setNavItems([
         {
           name: 'Панель питомника',
-          href: '#',
+          href: '/kennel-dashboard',
           icon: Store,
         },
         {
           name: 'Мой питомник',
-          href: `/kennel/${userState?.user?.kennel}`,
+          href: `/kennel/${userState?.user?.kennelId}`,
           icon: Bone,
         },
       ]);
