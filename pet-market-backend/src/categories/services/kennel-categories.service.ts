@@ -1,11 +1,11 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectModel } from "nestjs-typegoose";
 import { ReturnModelType } from "@typegoose/typegoose";
 import { KennelCategoriesSchema } from "../schemas/kennel-categories.schema";
 import { CategoriesService } from "./categories.service";
 import { Types } from "mongoose";
 import { CreateCustomCategoryDto } from "../dto/create.custom-category.dto";
-import { Errors } from "../../common/constants/errors";
+import { PetsService } from "../../pets/pets.service";
 
 @Injectable()
 export class KennelCategoriesService {
@@ -15,6 +15,7 @@ export class KennelCategoriesService {
             typeof KennelCategoriesSchema
         >,
         private readonly categoriesService: CategoriesService,
+        private readonly petsService: PetsService,
     ) {}
 
     async initKennelCategories(kennelId: Types.ObjectId) {
@@ -26,11 +27,12 @@ export class KennelCategoriesService {
         }).save();
     }
 
-    async restoreSystemCategory(
+    async restoreCategory(
         categoryId: Types.ObjectId,
         kennelId: Types.ObjectId,
     ) {
-        const isSystem = this.categoriesService.isSystemCategory(categoryId);
+        const isSystem =
+            await this.categoriesService.isSystemCategory(categoryId);
         if (isSystem)
             await this.kennelCategoriesSchema.findOneAndUpdate(
                 { kennelId: kennelId },
@@ -38,7 +40,8 @@ export class KennelCategoriesService {
                 { new: true },
             );
         else {
-            throw new ForbiddenException(Errors.NOT_SYSTEM_CATEGORY);
+            await this.categoriesService.enableCategory(categoryId, kennelId);
+            await this.petsService.enablePets(categoryId);
         }
     }
 
@@ -58,17 +61,17 @@ export class KennelCategoriesService {
     }
 
     async removeCategory(categoryId: Types.ObjectId, kennelId: Types.ObjectId) {
-        const isSystem = this.categoriesService.isSystemCategory(categoryId);
-        if (!isSystem)
-            await this.categoriesService.deleteCustomCategory(
-                kennelId,
-                categoryId,
+        const isSystem =
+            await this.categoriesService.isSystemCategory(categoryId);
+        console.log("1", isSystem);
+        if (isSystem)
+            await this.kennelCategoriesSchema.findOneAndUpdate(
+                { kennelId: kennelId },
+                { $pull: { categoryIds: categoryId } },
+                { new: true },
             );
-        await this.kennelCategoriesSchema.findOneAndUpdate(
-            { kennelId: kennelId },
-            { $pull: { categoryIds: categoryId } },
-            { new: true },
-        );
+        else await this.categoriesService.disableCategory(categoryId, kennelId);
+        await this.petsService.disablePets(categoryId);
     }
 
     async getCategoriesByKennel(kennelId: Types.ObjectId) {

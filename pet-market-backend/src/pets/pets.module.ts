@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { TypegooseModule } from "nestjs-typegoose";
 import { PetsController } from "./pets.controller";
 import { PetsService } from "./pets.service";
@@ -13,9 +13,10 @@ import { CategoriesModule } from "src/categories/categories.module";
                 schemaOptions: { collection: "Pets" },
             },
         ]),
-        CategoriesModule,
+        forwardRef(() => CategoriesModule),
     ],
     controllers: [PetsController],
     providers: [PetsService],
+    exports: [PetsService],
 })
 export class PetsModule {}

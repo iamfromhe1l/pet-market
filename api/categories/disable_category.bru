@@ -1,0 +1,15 @@
+meta {
+  name: disable_category
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{host}}/categories/6829e07f9964c340191cce38
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{at}}
+}
