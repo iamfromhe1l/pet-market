@@ -12,6 +12,7 @@ import { KennelsModule } from "./kennels/kennels.module";
 import { RBACGuard } from "./auth/guards/rbac.guard";
 import { PetsModule } from "./pets/pets.module";
 import { CategoriesModule } from "./categories/categories.module";
+import { ReviewsModule } from "./reviews/reviews.module";
 
 @Module({
     imports: [
@@ -26,6 +27,7 @@ import { CategoriesModule } from "./categories/categories.module";
         PetsModule,
         KennelsModule,
         CategoriesModule,
+        ReviewsModule,
     ],
     controllers: [AppController],
     providers: [

@@ -1,0 +1,17 @@
+meta {
+  name: replyToReview
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/reviews/682a7371f01d5f3449aaa5e7
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "message": "Спасибо за ваш отзыв"
+  }
+}

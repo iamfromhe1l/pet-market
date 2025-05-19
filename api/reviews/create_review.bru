@@ -1,0 +1,20 @@
+meta {
+  name: create_review
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/reviews
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "kennelId": "68290290cd909e528ee41686",
+    "petId": "6829073a2afdc703671d0929",
+    "comment": "Мне нравится эта кошка!",
+    "rating": 5
+  }
+}
