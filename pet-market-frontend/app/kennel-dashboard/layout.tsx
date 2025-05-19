@@ -3,6 +3,7 @@
 import { NotPublicLayout } from '@/components/not-public-layout';
 import { CategoryProvider } from '@/context/category/category-context';
 import { KennelProvider } from '@/context/kennel/kennel-context';
+import { PetProvider } from '@/context/pet/pet-context';
 import React from 'react';
 
 export default function KennelDashboardPageLayout({
@@ -12,9 +13,11 @@ export default function KennelDashboardPageLayout({
 }>) {
   return (
     <NotPublicLayout sidebarProps={{ pageTitle: 'Админ-панель питомника' }}>
-      <CategoryProvider>
-        <KennelProvider>{children}</KennelProvider>
-      </CategoryProvider>
+      <PetProvider>
+        <CategoryProvider>
+          <KennelProvider>{children}</KennelProvider>
+        </CategoryProvider>
+      </PetProvider>
     </NotPublicLayout>
   );
 }
