@@ -60,7 +60,7 @@ export default function KennelDashboardPage() {
           <div className="flex justify-between">
             <div>
               <CardTitle>Основная информация</CardTitle>
-              <CardDescription>Основания информация питомника</CardDescription>
+              <CardDescription>Основная информация питомника</CardDescription>
             </div>
             {isEdit ? null : (
               <BaseTooltip text="Редактировать">

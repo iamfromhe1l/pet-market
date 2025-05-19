@@ -71,10 +71,8 @@ export const UpdateCreateCustomCategory: React.FC<
     } else if (res.data) {
       if (category) {
         toast.success('Категория успешно изменена');
-        onUpdateCategory!(res.data);
       } else {
         toast.success('Категория успешно добавлена');
-        onAddCategory!(res.data);
       }
 
       setIsOpen(false);
@@ -135,13 +133,14 @@ export const UpdateCreateCustomCategory: React.FC<
                               variant="ghost"
                               disabled={loading}
                               className="size-0 cursor-pointer"
-                              onClick={() =>
+                              onClick={(e) => {
+                                e.preventDefault();
                                 field.onChange(
                                   field.value.filter(
                                     (cueBreed) => cueBreed !== breed,
                                   ),
-                                )
-                              }
+                                );
+                              }}
                             >
                               <X />
                             </Button>
@@ -177,7 +176,10 @@ export const UpdateCreateCustomCategory: React.FC<
                     className="cursor-pointer"
                     disabled={loading}
                     variant="secondary"
-                    onClick={() => setIsOpen(false)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsOpen(false);
+                    }}
                   >
                     Отменить <X />
                   </Button>

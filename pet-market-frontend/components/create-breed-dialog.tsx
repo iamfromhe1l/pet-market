@@ -56,7 +56,7 @@ export const CreateBreedDialog: React.FC<CreateBreedDialogProps> = ({
               name="breed"
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Описание питомника</FormLabel>
+                  <FormLabel>Название породы</FormLabel>
                   <FormControl>
                     <Input
                       id="name"
