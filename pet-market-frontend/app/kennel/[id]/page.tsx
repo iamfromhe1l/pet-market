@@ -1,8 +1,6 @@
 'use client';
 
-import { CategoryModel } from '@/api/models/category-model';
 import { BaseTooltip } from '@/components/base-tooltip';
-import { Categories } from '@/components/categories';
 import { KennelInfoDialog } from '@/components/kennel-info-dialog';
 import { PageLoading } from '@/components/page-loading';
 import { Button } from '@/components/ui/button';
@@ -19,12 +17,6 @@ import { useKennel } from '@/context/kennel/kennel-context';
 import { Info } from 'lucide-react';
 import { use, useEffect } from 'react';
 import { toast } from 'sonner';
-
-const categories: CategoryModel[] = [
-  { name: 'Собаки' },
-  { name: 'Грызуны' },
-  { name: 'Рыбы' },
-];
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -56,7 +48,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                 <BaseTooltip
                   text={KENNEL_STATUS[kennelState.kennel.status].title}
                 >
-                  <>{KENNEL_STATUS[kennelState.kennel.status].icon}</>
+                  {KENNEL_STATUS[kennelState.kennel.status].icon}
                 </BaseTooltip>
               </div>
             </CardTitle>
@@ -71,9 +63,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           </Button>
         </KennelInfoDialog>
       </CardHeader>
-      <CardContent>
-        <Categories categories={categories} />
-      </CardContent>
+      <CardContent></CardContent>
     </Card>
   );
 }

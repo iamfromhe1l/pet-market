@@ -8,7 +8,7 @@ interface BaseTooltipProps extends PropsWithChildren {
 export const BaseTooltip: React.FC<BaseTooltipProps> = ({ text, children }) => {
   return (
     <Tooltip>
-      <TooltipTrigger>{children}</TooltipTrigger>
+      <TooltipTrigger asChild>{children}</TooltipTrigger>
       <TooltipContent>
         <p>{text}</p>
       </TooltipContent>

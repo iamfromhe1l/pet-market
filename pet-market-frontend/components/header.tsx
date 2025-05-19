@@ -26,8 +26,9 @@ export const Header = () => {
             </Button>
           </Link>
         ) : null}
-        {userState?.user?.role === UserRole.SELLER && userState.user.kennel ? (
-          <Link href={`/kennel/${userState.user.kennel}`}>
+        {userState?.user?.role === UserRole.SELLER &&
+        userState.user.kennelId ? (
+          <Link href={`/kennel/${userState.user.kennelId}`}>
             <Button className="cursor-pointer" size="lg">
               <ShieldUser />
               Мой питомник
