@@ -14,3 +14,7 @@ export const ZOD_BASE_ERROR_MESSAGES = {
 export const ZOD_AUTH_ERROR_MESSAGES = {
   INVALID_EMAIL: 'Некорректный формат почты',
 } as const;
+
+export const ZOD_PET_ERROR_MESSAGES = {
+  INVALID_DATE: 'Некорректная дата рождения',
+};

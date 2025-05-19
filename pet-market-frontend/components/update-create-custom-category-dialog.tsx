@@ -32,13 +32,11 @@ import { toast } from 'sonner';
 
 interface UpdateCreateCustomCategoryProps extends PropsWithChildren {
   category?: CategoryModel;
-  onAddCategory?: (category: CategoryModel) => void;
-  onUpdateCategory?: (category: CategoryModel) => void;
 }
 
 export const UpdateCreateCustomCategory: React.FC<
   UpdateCreateCustomCategoryProps
-> = ({ children, category, onAddCategory, onUpdateCategory }) => {
+> = ({ children, category }) => {
   const { onUpdateCustomCategory, onCreateCustomCategory } = useCategory();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -93,7 +91,8 @@ export const UpdateCreateCustomCategory: React.FC<
           </DialogTitle>
           <DialogDescription>
             Заполните необходимые данные для
-            {category ? ' изменения' : ' создания'}
+            {category ? ' изменения ' : ' создания '}
+            категории
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

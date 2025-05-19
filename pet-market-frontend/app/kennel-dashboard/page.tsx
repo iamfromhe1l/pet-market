@@ -6,6 +6,7 @@ import { BecomeKennelForm } from '@/components/become-kennel-form';
 import { CategoriesArchiveDialog } from '@/components/categories-archive-dialog';
 import { CategoriesTable } from '@/components/categories-table';
 import { PageLoading } from '@/components/page-loading';
+import { Search } from '@/components/search';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -16,6 +17,7 @@ import {
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { UpdateCreateCustomCategory } from '@/components/update-create-custom-category-dialog';
+import { UpdateCreatePetDialog } from '@/components/update-create-pet-dialog';
 import { useCategory } from '@/context/category/category-context';
 import { useKennel } from '@/context/kennel/kennel-context';
 import { useUser } from '@/context/user/user-context';
@@ -37,6 +39,7 @@ export default function KennelDashboardPage() {
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [systemCategories, setSystemCategories] = useState<CategoryModel[]>([]);
+  const [key, setKey] = useState<number>(+new Date());
 
   useEffect(() => {
     if (!userState?.user?.kennelId) {
@@ -65,7 +68,6 @@ export default function KennelDashboardPage() {
             {isEdit ? null : (
               <BaseTooltip text="Редактировать">
                 <Button
-                  variant="outline"
                   className="cursor-pointer"
                   size="icon"
                   onClick={() => setIsEdit(true)}
@@ -93,11 +95,7 @@ export default function KennelDashboardPage() {
             </div>
             <div className="flex gap-2">
               <UpdateCreateCustomCategory>
-                <Button
-                  variant="outline"
-                  className="cursor-pointer"
-                  size="icon"
-                >
+                <Button className="cursor-pointer" size="icon">
                   <Plus />
                 </Button>
               </UpdateCreateCustomCategory>
@@ -114,11 +112,7 @@ export default function KennelDashboardPage() {
                   ) ?? []),
                 ]}
               >
-                <Button
-                  className="cursor-pointer"
-                  size="icon"
-                  variant="outline"
-                >
+                <Button className="cursor-pointer" size="icon">
                   <Archive />
                 </Button>
               </CategoriesArchiveDialog>
@@ -137,6 +131,34 @@ export default function KennelDashboardPage() {
               }
             />
           )}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <div className="flex justify-between">
+            <div>
+              <CardTitle>Питомцы</CardTitle>
+              <CardDescription>Все питомцы вашего питомника</CardDescription>
+            </div>
+            <UpdateCreatePetDialog
+              categories={categoryState?.categories ?? []}
+              onCreateNewPet={() => setKey(+new Date())}
+            >
+              <Button className="cursor-pointer">
+                <Plus />
+              </Button>
+            </UpdateCreatePetDialog>
+          </div>
+        </CardHeader>
+        <CardContent key={key}>
+          <Search
+            categories={categoryState?.categories ?? []}
+            defaultFilters={{
+              kennelId: kennelState?.kennel?._id,
+              populateKennel: true,
+            }}
+            showEditButton
+          />
         </CardContent>
       </Card>
     </div>
