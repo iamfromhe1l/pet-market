@@ -77,26 +77,28 @@ export const SearchFiltersSheet: React.FC<SearchFiltersSheetProps> = ({
               }
             />
           </div>
-          <div className="grid gap-2">
-            <Label>Категории</Label>
-            <MultiSelect
-              options={categories.map((category) => ({
-                label: category.name,
-                value: category._id,
-              }))}
-              defaultValue={filters.categoryId}
-              placeholder="Выберите категории"
-              onValueChange={(value) =>
-                onChangeFilters({
-                  ...filters,
-                  categoryId: value,
-                })
-              }
-              variant="inverted"
-              animation={0}
-              maxCount={8}
-            />
-          </div>
+          {(!filters.categoryId?.length || categories.length !== 1) && (
+            <div className="grid gap-2">
+              <Label>Категории</Label>
+              <MultiSelect
+                options={categories.map((category) => ({
+                  label: category.name,
+                  value: category._id,
+                }))}
+                defaultValue={filters.categoryId}
+                placeholder="Выберите категории"
+                onValueChange={(value) =>
+                  onChangeFilters({
+                    ...filters,
+                    categoryId: value,
+                  })
+                }
+                variant="inverted"
+                animation={0}
+                maxCount={8}
+              />
+            </div>
+          )}
           {filters.categoryId && filters.categoryId.length ? (
             <div className="grid gap-2">
               <Label>Породы</Label>
