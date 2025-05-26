@@ -16,7 +16,7 @@ export default class PetApi {
   }
 
   static async getPetById(petId: string): Promise<PetModel> {
-    return await api.get(`/pets/${petId}`);
+    return (await api.get(`/pets/${petId}`)).data;
   }
 
   static async updatePet(

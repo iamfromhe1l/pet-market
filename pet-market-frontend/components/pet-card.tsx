@@ -31,12 +31,14 @@ export const PetCard: React.FC<PetCardProps> = ({
   return (
     <div className="col-span-1 flex h-96 flex-col gap-2">
       <div className="relative w-full flex-1 overflow-hidden rounded-xl">
-        <Image
-          src="/avatar.jpg"
-          alt="pet-image"
-          className="absolute inset-0 h-full w-full object-cover"
-          fill
-        />
+        <Link href={`/pet/${pet._id}`}>
+          <Image
+            src="/avatar.jpg"
+            alt="pet-image"
+            className="absolute inset-0 h-full w-full object-cover"
+            fill
+          />
+        </Link>
         {pet.count !== 0 ? (
           pet.count === 1 ? null : (
             <BaseTooltip text={`Количество питомцев: ${pet.count}`}>
